@@ -2,14 +2,15 @@ const axios = require('axios');
 axios.defaults.baseURL = 'http://127.0.0.1:8000/api/v1/'
 
 export default async function apiCall(method, path, body) {
+  let res = {}
   switch(method.toLowerCase()) {
     case "post":
       axios.post()
       break
     case "get":
-      return await axios.get(path)
+      res = await axios.get(path)
       .then(response => {
-        return response;
+        return response
       })
       .catch(err => {
         console.error(err.message)
@@ -18,6 +19,7 @@ export default async function apiCall(method, path, body) {
     case "delete":
       break
     default:
-      return null
+      res = null
   }
+  return res
 }
