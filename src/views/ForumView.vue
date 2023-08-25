@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import apiCall from '../helpers/apiCall'
+
 export default {
   data() {
     return {
@@ -55,7 +57,9 @@ export default {
     };
   },
   methods: {
-    viewPost(postId) {
+    async viewPost(postId) {
+      const data = await apiCall('get', 'latest-forums/')
+      console.log(data)
       // Implement navigation to the individual post page
       // For example: this.$router.push(`/posts/${postId}`);
     },
