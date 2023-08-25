@@ -2,18 +2,21 @@
   <div class="forum">
     <section class="section">
       <div class="container">
-        <h1 class="title">Forum</h1>
+        <h1 class="title">Forums</h1>
         <div class="columns">
           <div class="column is-8">
             <div class="box">
               <h2 class="subtitle">Recent Discussions</h2>
-              <div v-for="forum in forums" :key="forum.id" class="media">
-                <div class="media-content">
-                  <p class="title is-5">{{ forum.name }}</p>
-                  <!-- <p class="subtitle is-6">By {{ forum.author }}</p> -->
-                  <img :src="forum.get_image" :alt="`image of ${forum.name}`"/>
-                  <p>{{ forum.description }}</p>
-                  <a class="button is-small is-primary" @click="viewPost(forum.id)">View Post</a>
+              <div class="box">
+                <div v-for="forum in forums" :key="forum.id" class="media">
+                  <div class="media-content">
+                    <p class="title is-5">{{ forum.name }}</p>
+                    <p class="title is-6">{{ forum.get_category }}</p>
+                    <!-- <p class="subtitle is-6">By {{ forum.author }}</p> -->
+                    <img :src="forum.get_image" :alt="`image of ${forum.name}`"/>
+                    <p>{{ forum.description }}</p>
+                    <a class="button is-small is-primary" @click="viewPost(forum.id)">View Post</a>
+                  </div>
                 </div>
               </div>
             </div>
@@ -41,15 +44,11 @@ export default {
   data() {
     return {
       forums: [],
-      categories: [
-        { id: 1, name: "General Discussion" },
-        { id: 2, name: "Technical Support" },
-        // Add more categories here
-      ]
+      categories: []
     };
   },
   async mounted() {
-    const data = 
+    const forums = 
     await apiCall('get', 'latest-forums/')
     .then(response => {
       return response?.data
@@ -58,8 +57,19 @@ export default {
       console.error(err.message)
       return []
     })
-    console.log(data)
-    this.forums = data
+
+    const categories = 
+    await apiCall('get', 'categories/')
+    .then(response => {
+      return response?.data
+    })
+    .catch(err => {
+      console.error(err.message)
+      return []
+    })
+
+    this.forums = forums
+    this.categories = categories
   },
   methods: {
     async viewPost(postId) {
