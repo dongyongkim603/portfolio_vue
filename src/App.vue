@@ -1,37 +1,6 @@
 <template>
   <div id="wrapper">
-    <nav class="navbar is-dark">
-      <div class="navbar-brand">
-        <router-link to="/" class="navbar-item"><strong>JOHN</strong></router-link>
-        <a 
-          class="navbar-burger" 
-          aria-label="menu"
-          aria-expanded="false"
-          data-target="navbar-menu"
-          @click="showMobileMenu = !showMobileMenu"
-        >
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
-      </div>
-      <div 
-        class="navbar-menu"
-        id="navbar-menu"
-        v-bind:class="{'is-active': showMobileMenu}"
-      >
-        <div class="navbar-end">
-          <router-link to="/about" class="navbar-item">about</router-link>
-          <router-link to="/gallery" class="navbar-item">gallery</router-link>
-
-          <div class="navbar-item">
-            <div class="buttons">
-              <router-link to="/log-in" class="button is-light">Log in</router-link>
-            </div>
-          </div>
-        </div>
-      </div>
-    </nav>
+    <NavigationBar />
     <section class="section">
       <router-view/>
     </section>
@@ -64,7 +33,12 @@
   </div>
 </template>
 <script>
+import NavigationBar from './components/NavigationBar'
+
 export default {
+  components: {
+    NavigationBar
+  },
   data() {
     return {
       showMobileMenu: false
