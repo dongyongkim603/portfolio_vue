@@ -7,17 +7,24 @@ export default async function apiCall(method, path, body) {
   let res = {}
   switch(method.toLowerCase()) {
     case "post":
-      axios.post()
+      res = axios.post(path, body)
+        .then(response => {
+          return response
+        })
+        .catch(err => {
+          console.error(err.message)
+          return { message: err.message }
+        })
       break
     case "get":
       res = await axios.get(path)
-      .then(response => {
-        return response
-      })
-      .catch(err => {
-        console.error(err.message)
-        return { message: err.message }
-      })
+        .then(response => {
+          return response
+        })
+        .catch(err => {
+          console.error(err.message)
+          return { message: err.message }
+        })
     case "delete":
       break
     default:

@@ -12,7 +12,7 @@
         <h2 class="subtitle">Description</h2>
       </div>
     </div>
-    <comment-form @comment-submitted="handleCommentSubmission"></comment-form>
+    <CommentForm :forumId="forum.id"/>
   </div>
 </template>
 
