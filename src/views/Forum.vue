@@ -12,28 +12,42 @@
         <h2 class="subtitle">Description</h2>
       </div>
     </div>
+    <comment-form @comment-submitted="handleCommentSubmission"></comment-form>
   </div>
 </template>
 
 <script>
 import apiCall from '../helpers/apiCall'
+import CommentForm from './CommentForm.vue';
 
 export default {
   name: 'Forum',
+  components: {
+    CommentForm
+  },
   data() {
     return {
       forum: {}
     }
   },
   async mounted() {
-    const category_slug = this.$route.params.category_slug
-    const forum_slug = this.$route.params.forum_slug
-    this.forum = await apiCall('get', `forums/${category_slug}/${forum_slug}/`)
-    .then(response => {
-      return response?.data      
-    }).catch(err => {
-      console.error(err.message)
-    })
+    await this.fetchForumData()
+  },
+  methods: {
+    async fetchForumData() {
+      const category_slug = this.$route.params.category_slug
+      const forum_slug = this.$route.params.forum_slug
+      this.forum = await apiCall('get', `forums/${category_slug}/${forum_slug}/`)
+      .then(response => {
+        return response?.data      
+      }).catch(err => {
+        console.error(err.message)
+      })
+    },
+    handleCommentSubmission(commentData) {
+      // Handle comment submission logic, e.g., send to backend AP
+      console.log('Submitted comment:', commentData);
+    }
   }
 }
 </script>
