@@ -18,7 +18,7 @@
 
 <script>
 import apiCall from '../helpers/apiCall'
-import CommentForm from './CommentForm.vue';
+import CommentForm from './../components/CommentForm/index.vue';
 
 export default {
   name: 'Forum',
