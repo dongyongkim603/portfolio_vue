@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import Forum from '../views/Forum.vue'
 
 const routes = [
   {
@@ -18,8 +19,13 @@ const routes = [
   {
     path: '/forums',
     name: 'forums',
-    component: () => import(/* webpackChunkName: "about" */ '../views/ForumView.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/ForumsView.vue')
   },
+  {
+    path: '/:category_slug/:forum_slug/',
+    name: 'forum',
+    component: Forum
+  }
 ]
 
 const router = createRouter({

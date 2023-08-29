@@ -15,7 +15,9 @@
                     <!-- <p class="subtitle is-6">By {{ forum.author }}</p> -->
                     <img :src="forum.get_image" :alt="`image of ${forum.name}`"/>
                     <p>{{ forum.description }}</p>
-                    <a class="button is-small is-primary" @click="viewPost(forum.id)">View Post</a>
+                    <router-link class="button is-small is-primary" v-bind:to="forum.get_absolute_url">
+                      View Forum
+                    </router-link>
                   </div>
                 </div>
               </div>
@@ -75,12 +77,6 @@ export default {
     this.categories = categories
   },
   methods: {
-    async viewPost(postId) {
-      // const data = await apiCall('get', 'latest-forums/')
-      // console.log(data)
-      // Implement navigation to the individual post page
-      // For example: this.$router.push(`/posts/${postId}`);
-    },
     filterByCategory(categoryId) {
       // Implement logic to filter posts by category
       // Update the displayed posts based on the selected category
