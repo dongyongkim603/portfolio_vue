@@ -47,6 +47,9 @@ export default {
       categories: []
     };
   },
+  beforeCreate() {
+    document.title = 'John | Forums'
+  },
   async mounted() {
     const forums = 
     await apiCall('get', 'latest-forums/')
