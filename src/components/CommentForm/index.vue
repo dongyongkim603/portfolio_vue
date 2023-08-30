@@ -5,7 +5,12 @@
       <div class="field">
         <label class="label">Comment</label>
         <div class="control">
-          <textarea v-model="comment" class="textarea" placeholder="Your Comment"></textarea>
+          <textarea 
+            v-model="comment"
+            class="textarea"
+            placeholder="Your Comment" 
+            :required="true"
+          />
         </div>
       </div>
       <div class="field">
