@@ -2,10 +2,10 @@
   <div class="selling-point">
     <div class="column">
       <div class="column is-one-third">
+        <h2 class="title">{{ sellingPoint.headline }}</h2>
         <img :src="sellingPoint.main_image.asset.url" alt="Main Image" class="image" />
       </div>
       <div class="column">
-        <h2 class="title">{{ sellingPoint.headline }}</h2>
         <p class="subtitle">{{ sellingPoint.content }}</p>
         <a :href="sellingPoint.button_link" class="button is-primary">{{ sellingPoint.button }}</a>
       </div>
