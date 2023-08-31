@@ -7,13 +7,23 @@
           <div class="field">
             <label>Username</label>
             <div class="control">
-              <input type="text" class="input" v-model="username">
+              <input 
+                type="text"
+                class="input"
+                v-model="username"
+                :required="true"
+              >
             </div>
           </div>
           <div class="field">
             <label>Password</label>
             <div class="control">
-              <input type="password" class="input" v-model="password">
+              <input 
+                type="password"
+                class="input"
+                v-model="password"
+                :required="true"
+              >
             </div>
           </div>
           <div class="notification is-danger" v-if="errors.length">
@@ -49,48 +59,43 @@ export default {
     document.title = 'Log In | John'
   },
   methods: {
-    submitForm() {
-      this.errors = []
+    async submitForm() {
+      localStorage.removeItem('token')
 
-      if(this.username === '') {
-        this.errors.push('The username cannot be empty.')
+      const userData = {
+        username: this.username,
+        password: this.password
       }
 
-      if(this.password === '') {
-        this.errors.push('The password cannot be empty.')
-      }
+      await apiCall(
+        'post',
+        '/token/login',
+        userData,
+        this.$store.state.token
+      ).then(response => {
+        debugger
+        const token = response.data.auth_token
 
-      if(!this.errors.length) {
-        const userData = {
-          username: this.username,
-          password: this.password
-        }
+        this.$store.commit('setToken', token)
 
-        apiCall('post', userData, this.$store.state.token)
-        .then(response => {
-          toast({
-            message: 'Account created, please log in!',
-            type: 'is-success',
-            dismissible: true,
-            pauseOnHover: true,
-            duration: 2000,
-            position: 'bottom-right'
-          })
-          this.$router.push('/log-in')
-        })
-        .catch(err => {
-          if(err.response) {
-            for(const property in err.response.data) {
-              this.errors.push(`${property}: ${err.response.data[property]}`)
-            }
-            console.error(JSON.stringify(err.response.data))
-          } else if (error.message) {
-            this.errors.push('Something went wrong. Please try again')
-            console.error(JSON.stringify(err))
+        localStorage.setItem('token', token)
+        
+        const toPath = this.$route.query.to || '/'
+
+        this.$router.push(toPath)
+      })
+      .catch(err => {
+        if(err.response) {
+          for(const property in err.response.data) {
+            this.errors.push(`${property}: ${err.response.data[property]}`)
           }
-        })
+          console.error(JSON.stringify(err.response.data))
+        } else if (err.message) {
+          this.errors.push('Something went wrong. Please try again')
+          console.error(JSON.stringify(err))
+        }
+      })
 
-      }
     }
   }
 }

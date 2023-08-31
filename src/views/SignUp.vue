@@ -74,8 +74,11 @@ export default {
           password: this.password
         }
 
-        apiCall('post', userData, this.$store.state.token)
-        .then(response => {
+        apiCall(
+          'post',
+          'users/',
+          userData, this.$store.state.token
+        ).then(response => {
           toast({
             message: 'Account created, please log in!',
             type: 'is-success',
