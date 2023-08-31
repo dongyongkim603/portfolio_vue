@@ -2,7 +2,7 @@
   <div class="page-sign-up">
     <div class="columns">
       <div class="column is-4 is-offset-4">
-        <h1 class="title">Sign Up</h1>
+        <h1 class="title">Log In</h1>
         <form @submit.prevent="submitForm">
           <div class="field">
             <label>Username</label>
@@ -16,22 +16,16 @@
               <input type="password" class="input" v-model="password">
             </div>
           </div>
-          <div class="field">
-            <label>Repeat password</label>
-            <div class="control">
-              <input type="password" class="input" v-model="password2">
-            </div>
-          </div>
           <div class="notification is-danger" v-if="errors.length">
             <p v-for="error in errors" :key="error">{{error}}</p>
           </div>
           <div class="field">
             <div class="control">
-              <button class="button is-dark">Sign Up</button>
+              <button class="button is-dark">Log In</button>
             </div>
           </div>
           <hr>
-          Or <router-link to="/log-in">click here</router-link> to log in!
+          Or <router-link to="/sign-up">click here</router-link> to sign up!
         </form>
       </div>
     </div>
@@ -43,14 +37,16 @@ import { toast } from 'bulma-toast'
 import apiCall from '../helpers/apiCall'
 
 export default {
-  name: 'Sign Up',
+  name: 'Login',
   data() {
     return {
       username: '',
       password: '',
-      password2: '',
       errors: []
     }
+  },
+  beforeCreate() {
+    document.title = 'Log In | John'
   },
   methods: {
     submitForm() {
@@ -62,10 +58,6 @@ export default {
 
       if(this.password === '') {
         this.errors.push('The password cannot be empty.')
-      }
-
-      if(this.password !== this.password2) {
-        this.errors.push('The passwords do not match.')
       }
 
       if(!this.errors.length) {

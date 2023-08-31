@@ -54,8 +54,11 @@ export default {
   },
   async mounted() {
     const forums = 
-    await apiCall('get', 'latest-forums/')
-    .then(response => {
+    await apiCall(
+      'get',
+      'latest-forums/',
+      this.$store.state.token
+    ).then(response => {
       return response?.data
     })
     .catch(err => {
@@ -64,7 +67,10 @@ export default {
     })
 
     const categories = 
-    await apiCall('get', 'categories/')
+    await apiCall(
+      'get',
+      'categories/',
+      this.$store.state.token)
     .then(response => {
       return response?.data
     })

@@ -37,7 +37,10 @@ export default {
     async fetchForumData() {
       const category_slug = this.$route.params.category_slug
       const forum_slug = this.$route.params.forum_slug
-      this.forum = await apiCall('get', `forums/${category_slug}/${forum_slug}/`)
+      this.forum = await apiCall(
+        'get',
+        `forums/${category_slug}/${forum_slug}/`,
+        this.$store.state.token)
       .then(response => {
         return response?.data      
       }).catch(err => {

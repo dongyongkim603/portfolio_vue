@@ -39,13 +39,15 @@ export default {
     async submitComment() {
       await apiCall(
         'post',
-        'comments/', 
+        'comments/',
+        this.$store.state.token,
         {
           creator: 1,
           forum: this.forumId,
           content: this.comment,
           image: null  // Optional: provide the image field if needed
-        }).catch(err => {
+        })
+        .catch(err => {
           console.error(err.message)
         })
       
