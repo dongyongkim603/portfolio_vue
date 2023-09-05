@@ -77,7 +77,8 @@ export default {
         apiCall(
           'post',
           'users/',
-          userData, this.$store.state.token
+          this.$store.state.token,
+          userData
         ).then(response => {
           toast({
             message: 'Account created, please log in!',

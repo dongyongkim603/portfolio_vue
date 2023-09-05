@@ -69,11 +69,10 @@ export default {
 
       await apiCall(
         'post',
-        '/token/login',
+        'token/login/',
+        this.$store.state.token,
         userData,
-        this.$store.state.token
       ).then(response => {
-        debugger
         const token = response.data.auth_token
 
         this.$store.commit('setToken', token)
@@ -85,6 +84,7 @@ export default {
         this.$router.push(toPath)
       })
       .catch(err => {
+        debugger
         if(err.response) {
           for(const property in err.response.data) {
             this.errors.push(`${property}: ${err.response.data[property]}`)
