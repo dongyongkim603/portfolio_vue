@@ -21,31 +21,15 @@
     >
       <div class="navbar-end">
         <router-link to="/about" class="navbar-item">about</router-link>
-        <router-link to="/gallery" class="navbar-item">gallery</router-link>
+        <!-- <router-link to="/gallery" class="navbar-item">gallery</router-link> -->
         <router-link to="/forums" class="navbar-item">forum</router-link>
         <div class="navbar-item">
           <div v-if="!$store.state.token" class="buttons">
             <router-link to="/log-in" class="button is-light">Log in</router-link>
           </div>
-          <div v-else class="buttons">
-            <div class="user-dropdown">
-              <!-- User Image or Icon -->
-              <button @click="toggleDropdown">
-                <i v-if="!hasUserImage" class="fas fa-user"></i>
-                <img v-else :src="userImageUrl" alt="User" />
-              </button>
-
-              <!-- Dropdown Menu -->
-              <div v-if="showDropdown" class="dropdown-menu">
-                <!-- Dropdown content goes here -->
-                <ul>
-                  <li>Profile</li>
-                  <li>Settings</li>
-                  <li>Logout</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+        </div>
+        <div class="navbar-item">
+          <UserIcon />
         </div>
       </div>
     </div>
@@ -53,7 +37,12 @@
 </template>
   
 <script>
+import UserIcon from './UserIcon.vue';
+
 export default {
+  components: {
+    UserIcon
+  },
   data() {
     return {
       showMobileMenu: false,
@@ -70,35 +59,17 @@ export default {
   methods: {
     toggleDropdown() {
       this.showDropdown = !this.showDropdown;
+    },
+    logout() {
+      debugger
+      localStorage.removeItem('token')
+      localStorage.removeItem('username')
+      localStorage.removeItem('userid')
+
+      this.$store.commit('removeToken')
+
+      this.$router.push('/')
     }
   }
 }
 </script>
-
-<style scoped>
-.user-dropdown {
-  position: relative;
-}
-
-.dropdown-menu {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  display: none;
-  z-index: 10;
-  background-color: yellowgreen;
-  border-radius: 5px;
-  padding: 0.5rem;
-}
-
-.user-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.user-dropdown button:focus + .dropdown-menu {
-  display: block;
-}
-</style>

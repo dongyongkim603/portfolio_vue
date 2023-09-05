@@ -10,7 +10,7 @@ export default createStore({
   },
   mutations: {
     initializeStore(state) {
-      if(localStorage.getItem('toekn')) {
+      if(localStorage.getItem('token')) {
         state.token = localStorage.getItem('token')
         state.isAuthenticated = true
       } else {
