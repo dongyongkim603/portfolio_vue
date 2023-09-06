@@ -5,8 +5,7 @@
         <i v-if="!hasUserImage" class="fas fa-user"></i>
         <img v-else :src="userImageUrl" alt="User" />
       </button>
-      {{showDropdown}}
-      <div class="dropdown-menu" >
+      <div v-if="showDropdown" class="dropdown">
         <ul>
           <li class="custom-dropdown-item">
             <router-link to="/my-account" class="custom-link">Profile</router-link>
@@ -44,7 +43,6 @@ export default {
       this.showDropdown = !this.showDropdown;
     },
     logout() {
-      debugger
       localStorage.removeItem('token')
       localStorage.removeItem('username')
       localStorage.removeItem('userid')
@@ -57,19 +55,16 @@ export default {
 }
 </script>
 <style scoped>
-.dropdown-menu {
+.dropdown {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  display: none;
+  top: 100%;
+  left: -4rem;
   background-color: whitesmoke;
   border-radius: 5px;
   padding: 0.5rem;
   color: black;
-  z-index: 10;
 }
 
-/* Use Vue's v-show to control visibility */
 .user-dropdown.active .dropdown-menu {
   display: block;
 }

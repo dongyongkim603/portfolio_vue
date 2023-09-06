@@ -29,7 +29,7 @@
           </div>
         </div>
         <div class="navbar-item">
-          <UserIcon />
+          <UserIcon v-if="$store.state.isAuthenticated"/>
         </div>
       </div>
     </div>
