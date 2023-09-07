@@ -20,9 +20,9 @@
       v-bind:class="{'is-active': showMobileMenu}"
     >
       <div class="navbar-end">
-        <router-link to="/about" class="navbar-item">about</router-link>
+        <router-link to="/about" class="navbar-item">About</router-link>
         <!-- <router-link to="/gallery" class="navbar-item">gallery</router-link> -->
-        <router-link to="/forums" class="navbar-item">forum</router-link>
+        <router-link to="/forums" class="navbar-item">Forum</router-link>
         <div class="navbar-item">
           <div v-if="!$store.state.token" class="buttons">
             <router-link to="/log-in" class="button is-light">Log in</router-link>

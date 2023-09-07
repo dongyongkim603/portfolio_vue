@@ -12,26 +12,37 @@
         <h2 class="subtitle">Description</h2>
       </div>
     </div>
+    <div 
+      class="comments" 
+      v-for="comment in comments"
+      :key="comment.id"
+    >
+      <Comment :comment="comment" />
+    </div>
     <CommentForm :forumId="forum.id"/>
   </div>
 </template>
 
 <script>
 import apiCall from '../helpers/apiCall'
-import CommentForm from './../components/CommentForm/index.vue';
+import Comment from './../components/Comment/index.vue';
+import CommentForm from './../components/Comment/CommentForm.vue';
 
 export default {
   name: 'Forum',
   components: {
-    CommentForm
+    CommentForm,
+    Comment
   },
   data() {
     return {
-      forum: {}
+      forum: {},
+      comments: []
     }
   },
   async mounted() {
     await this.fetchForumData()
+    await this.fetchCommentData()
   },
   methods: {
     async fetchForumData() {
@@ -47,9 +58,18 @@ export default {
         console.error(err.message)
       })
     },
-    handleCommentSubmission(commentData) {
-      // Handle comment submission logic, e.g., send to backend AP
-      console.log('Submitted comment:', commentData);
+    async fetchCommentData() {
+      this.comments = await apiCall(
+        'get',
+        `comments/`,
+        this.$store.state.token)
+      .then(response => {
+        debugger
+        return response?.data      
+      }).catch(err => {
+        debugger
+        console.error(err.message)
+      })
     }
   }
 }

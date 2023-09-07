@@ -101,7 +101,6 @@ export default {
             console.error(JSON.stringify(err))
           }
         })
-
       }
     }
   }
