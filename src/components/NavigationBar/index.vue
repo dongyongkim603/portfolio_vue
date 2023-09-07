@@ -61,12 +61,12 @@ export default {
       this.showDropdown = !this.showDropdown;
     },
     logout() {
-      debugger
       localStorage.removeItem('token')
       localStorage.removeItem('username')
       localStorage.removeItem('userid')
 
       this.$store.commit('removeToken')
+      this.$store.commit('removeUsername')
 
       this.$router.push('/')
     }

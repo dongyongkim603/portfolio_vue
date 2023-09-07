@@ -73,9 +73,11 @@ export default {
         this.$store.state.token,
         userData,
       ).then(response => {
+        debugger
         const token = response.data.auth_token
 
         this.$store.commit('setToken', token)
+        this.$store.commit('setUserData', userData)
 
         localStorage.setItem('token', token)
         
@@ -84,7 +86,6 @@ export default {
         this.$router.push(toPath)
       })
       .catch(err => {
-        debugger
         if(err.response) {
           for(const property in err.response.data) {
             this.errors.push(`${property}: ${err.response.data[property]}`)
