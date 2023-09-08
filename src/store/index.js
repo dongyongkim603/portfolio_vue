@@ -5,7 +5,8 @@ export default createStore({
     isAuthenticated: false,
     token: '',
     isLoading: false,
-    username: ''
+    username: '',
+    isSuper: false
   },
   getters: {
   },
@@ -14,11 +15,13 @@ export default createStore({
       if(localStorage.getItem('token')) {
         state.token = localStorage.getItem('token')
         state.username = localStorage.getItem('username')
+        state.isSuper = localStorage.getItem('isSuper')
         state.isAuthenticated = true
       } else {
         state.token = ''
         state.username = ''
         state.isAuthenticated = false
+        state.isSuper = false
       }
     },
     setIsLoading(state, status) {
@@ -33,10 +36,16 @@ export default createStore({
       state.isAuthenticated = false
     },
     setUsername(state, username) {
-      username = username
+      state.username = username
     },
     removeUsername(state, username) {
-      username = ''
+      state.username = ''
+    },
+    setIsSuper(state, isSuper) {
+      state.isSuper = isSuper
+    },
+    removeIsSuper(state, isSuper) {
+      state.isSuper = false 
     }
   },
   actions: {

@@ -64,10 +64,8 @@ export default {
         `comments/`,
         this.$store.state.token)
       .then(response => {
-        debugger
         return response?.data      
       }).catch(err => {
-        debugger
         console.error(err.message)
       })
     }

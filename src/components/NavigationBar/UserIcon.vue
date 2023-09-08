@@ -46,9 +46,11 @@ export default {
       localStorage.removeItem('token')
       localStorage.removeItem('username')
       localStorage.removeItem('userid')
+      localStorage.removeItem('isSuper')
 
       this.$store.commit('removeToken')
       this.$store.commit('removeUsername')
+      this.$store.commit('removeIsSuper')
 
       this.$router.push('/')
     }

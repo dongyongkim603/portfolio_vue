@@ -73,12 +73,14 @@ export default {
         this.$store.state.token,
         userData,
       ).then(response => {
-        debugger
         const token = response.data.auth_token
 
         this.$store.commit('setToken', token)
-        this.$store.commit('setUserData', userData)
-
+        this.$store.commit('setUsername', this.username)
+        // TODO: check if isSuper is avaialbe here
+        // this.$store.commit('setUsername', this.username)
+        
+        localStorage.setItem('username', this.username)
         localStorage.setItem('token', token)
         
         const toPath = this.$route.query.to || '/'
