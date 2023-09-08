@@ -9,7 +9,7 @@
       <div class="media-content">
         <div class="comment-content">
           <p>
-            <strong>@{{ comment.get_creator }}</strong> | {{comment.date_added}}
+            <strong>@{{ comment.get_creator }}</strong> | {{timeSince(comment.date_added)}}
             <br>
             {{ comment.content }}
           </p>
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { timeSince } from '../../helpers/dateTime.js'
+
 export default {
   props: {
     comment: Object,
