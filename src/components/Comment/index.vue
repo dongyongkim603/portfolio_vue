@@ -9,7 +9,7 @@
       <div class="media-content">
         <div class="comment-content">
           <p>
-            <strong>@{{ comment.get_creator }}</strong> | {{timeSince(comment.date_added)}}
+            <strong>@{{ comment.get_creator }}</strong> | {{showTimeSince(comment.date_added)}}
             <br>
             {{ comment.content }}
           </p>
@@ -26,6 +26,11 @@ export default {
   props: {
     comment: Object,
   },
+  methods: {
+    showTimeSince(date) {
+      return timeSince(date)
+    }
+  }
 };
 </script>
 

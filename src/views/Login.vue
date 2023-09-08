@@ -59,6 +59,17 @@ export default {
     document.title = 'Log In | John'
   },
   methods: {
+    async fetchUserDetails() {
+      return await apiCall(
+        'get',
+        `profile/${this.username}/`,
+        this.$store.state.token)
+        .then(response => {
+          return response?.data
+        }).catch(err => {
+          console.error(err.message)
+        })
+    },
     async submitForm() {
       localStorage.removeItem('token')
 
@@ -72,17 +83,23 @@ export default {
         'token/login/',
         this.$store.state.token,
         userData,
-      ).then(response => {
-        const token = response.data.auth_token
+      ).then(async response => {
+        const userDetails = await this.fetchUserDetails()
 
+        const token = response.data.auth_token
+        
         this.$store.commit('setToken', token)
         this.$store.commit('setUsername', this.username)
-        // TODO: check if isSuper is avaialbe here
-        // this.$store.commit('setUsername', this.username)
+        this.$store.commit('setUserDetails', userDetails)
         
         localStorage.setItem('username', this.username)
         localStorage.setItem('token', token)
-        
+        localStorage.setItem('isSuper', userDetails.get_is_superuser)
+        localStorage.setItem('age', userDetails.age)
+        localStorage.setItem('dateJoined', userDetails.get_date_joined)
+        localStorage.setItem('profileImageUrl', userDetails.get_profile_image)
+        localStorage.setItem('thumbnailUrl', userDetails.get_thumbnail)
+
         const toPath = this.$route.query.to || '/'
 
         this.$router.push(toPath)

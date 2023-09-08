@@ -6,7 +6,11 @@ export default createStore({
     token: '',
     isLoading: false,
     username: '',
-    isSuper: false
+    isSuper: false,
+    age: null,
+    dateJoined: null,
+    profileImageUrl: '',
+    thumbnailUrl: '',
   },
   getters: {
   },
@@ -41,11 +45,21 @@ export default createStore({
     removeUsername(state, username) {
       state.username = ''
     },
-    setIsSuper(state, isSuper) {
-      state.isSuper = isSuper
+    setUserDetails(state, userDetails) {
+      state.isSuper = true
+      state.age = userDetails.age
+      state.dateJoined = userDetails.get_date_joined,
+      state.profileImageUrl = userDetails.get_profile_image
+      state.thumbnailUrl = userDetails.get_thumbnail
+      state.isSuper = userDetails.get_is_superuser
     },
-    removeIsSuper(state, isSuper) {
-      state.isSuper = false 
+    removeUserDetails(state, userDetails) {
+      state.isSuper = false
+      state.age = null
+      state.dateJoined = null,
+      state.profileImageUrl = ''
+      state.thumbnailUrl = ''
+      state.isSuper = false
     }
   },
   actions: {
