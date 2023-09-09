@@ -12,6 +12,10 @@
         <h2 class="subtitle">Description</h2>
       </div>
     </div>
+    <CommentForm 
+      :forumId="forum.id"
+      @loadPostedComment="fetchCommentData"
+    />
     <div 
       class="comments" 
       v-for="comment in comments"
@@ -19,7 +23,6 @@
     >
       <Comment :comment="comment" />
     </div>
-    <CommentForm :forumId="forum.id"/>
   </div>
 </template>
 

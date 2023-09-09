@@ -26,6 +26,7 @@
 import apiCall from '../../helpers/apiCall';
 
 export default {
+  emits: ['loadPostedComment'],
   props: {
     forumId: Number
   },
@@ -49,8 +50,10 @@ export default {
         })
         .catch(err => {
           console.error(err.message)
+          return
         })
-      
+      debugger
+      this.$emit('loadPostedComment');
 
       // Clear form fields
       this.name = '';
@@ -62,6 +65,6 @@ export default {
 
 <style scoped>
 .comment-form {
-  margin-top: 20px;
+  margin: 2rem 0 2rem 0;
 }
 </style>
