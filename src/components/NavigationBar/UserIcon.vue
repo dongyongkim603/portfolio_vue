@@ -3,7 +3,7 @@
     <div class="user-dropdown">
       <button @click="toggleDropdown">
         <i v-if="!hasUserImage" class="fas fa-user"></i>
-        <img v-else :src="userImageUrl" alt="User" />
+        <img v-else class="user-icon" :src="userImageUrl" alt="User Dropdown Icon" />
       </button>
       <div v-if="showDropdown" class="dropdown">
         <ul>
@@ -28,14 +28,14 @@ export default {
   data() {
     return {
       showMobileMenu: false,
-      hasUserImage: false, // Set this to true if user image is present
+      hasUserImage: (typeof localStorage?.thumbnailUrl  !== 'undefined' &&
+        typeof this.$store.state.thumbnailUrl !== 'undefined'),
       showDropdown: false
     }
   },
   computed: {
     userImageUrl() {
-      // Return the user image URL here if available
-      return '/path/to/user/image.jpg';
+      return localStorage?.thumbnailUrl || this.$store.state.thumbnailUrl
     }
   },
   methods: {
@@ -62,6 +62,10 @@ export default {
 }
 </script>
 <style scoped>
+.user-icon {
+  width: ;
+}
+
 .dropdown {
   position: absolute;
   top: 100%;
@@ -83,22 +87,21 @@ export default {
 }
 
 .custom-dropdown-item:hover {
-  background-color: #f0f0f0; /* Change to your desired hover background color */
+  background-color: #f0f0f0;
 }
 
 /* Style for links */
 .custom-link {
-  color: #007bff; /* Change to your desired link color */
+  color: #333;
   text-decoration: none;
 }
 
 .custom-link:hover {
-  text-decoration: underline; /* Add underline on hover */
+  text-decoration: underline;
 }
 
-/* Style for plain text items */
 .custom-text {
-  color: #333; /* Change to your desired text color */
+  color: #333;
 }
 
 </style>
