@@ -42,13 +42,16 @@ export default {
 </script>
 
 <style scoped>
-img{
+img {
   margin: auto;
+  overflow: hidden;
+  max-height: 100%;
+  max-width: 100%;
 }
 
 .carousel {
-  height: 35rem;
   width: 35rem;
+  
   margin: auto;
   background-color: #f0f0f0;
   padding: 2rem;

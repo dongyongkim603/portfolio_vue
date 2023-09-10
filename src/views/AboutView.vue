@@ -1,7 +1,8 @@
 <template>
   <div class="about">
-    <h1>{{headline}}</h1>
+    <h1 v-if="headline">{{headline}}</h1>
     <Banner 
+      v-if="banner"
       :imageUrl="banner"
     />
     <ImageGalary
