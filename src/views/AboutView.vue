@@ -71,6 +71,7 @@ export default {
           alt
         }
       }`)
+    console.log(pageData)
     this.banner = pageData[0]?.banner?.asset?.url
     this.headline = pageData[0]?.headline
     this.sellingPoints = pageData[0]?.components
