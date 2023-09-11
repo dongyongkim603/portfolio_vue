@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <h1 v-if="headline">{{headline}}</h1>
+    <h1 class="title" v-if="headline">{{headline}}</h1>
     <Banner 
       v-if="banner"
       :imageUrl="banner"
@@ -9,7 +9,7 @@
       v-if="imageData.length > 0"
       :images="imageData"
     />
-    <div class="columns">
+    <div v-if="sellingPoints" class="columns">
       <SellingPoint
         v-for="sellingPoint in sellingPoints"
         :key="sellingPoint.id"
@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import fetchSanity from '../helpers/sanity'
+import { fetchSanity } from '../helpers/sanity'
 import ImageGalary from './../components/ImageGallary/index.vue'
 import Banner from './../components/Banner/index.vue'
 import SellingPoint from './../components/SellingPoint/index.vue'
@@ -36,10 +36,7 @@ export default {
     return {
       banner: '',
       headline: '',
-      imageData: [
-        // { id: 1, url: 'path_to_your_image1.jpg' },
-        // { id: 2, url: 'path_to_your_image2.jpg' },
-      ],
+      imageData: [],
       sellingPoints: []
     }
   },
@@ -79,4 +76,6 @@ export default {
   },
 }
 </script>
+<style scoped>
 
+</style>

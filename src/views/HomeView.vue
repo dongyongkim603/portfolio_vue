@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <h1 v-if="headline">{{headline}}</h1>
+    <h1 class="title" v-if="headline">{{headline}}</h1>
     <Banner 
       v-if="banner"
       :imageUrl="banner"
@@ -30,7 +30,7 @@ import Banner from '../components/Banner/index.vue'
 import ImageGalary from '../components/ImageGallary/index.vue'
 import SellingPoint from '../components/SellingPoint/index.vue'
 
-import fetchSanity from '../helpers/sanity'
+import { fetchSanity } from '../helpers/sanity'
 
 export default {
   name: 'HomeView',
