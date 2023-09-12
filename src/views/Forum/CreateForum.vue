@@ -1,24 +1,30 @@
 <template>
-  <div class="comment-form">
-    <h3 class="title is-4">Leave a Comment</h3>
-    <form @submit.prevent="submitComment">
-      <div class="field">
-        <label class="label">Comment</label>
-        <div class="control">
-          <textarea 
-            v-model="comment"
-            class="textarea"
-            placeholder="Your Comment" 
-            :required="true"
-          />
+  <div class="forum">
+    <section class="section">
+      <div class="container">
+        <div class="comment-form">
+          <h3 class="title is-4">Leave a Comment</h3>
+          <form @submit.prevent="submitComment">
+            <div class="field">
+              <label class="label">Comment</label>
+              <div class="control">
+                <textarea 
+                  v-model="comment"
+                  class="textarea"
+                  placeholder="Your Comment" 
+                  :required="true"
+                />
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <button class="button is-primary">Submit</button>
+              </div>
+            </div>
+          </form>
         </div>
       </div>
-      <div class="field">
-        <div class="control">
-          <button class="button is-primary">Submit</button>
-        </div>
-      </div>
-    </form>
+    </section>
   </div>
 </template>
 
@@ -52,7 +58,7 @@ export default {
           console.error(err.message)
           return
         })
-        
+      debugger
       this.$emit('loadPostedComment');
 
       // Clear form fields
@@ -64,7 +70,4 @@ export default {
 </script>
 
 <style scoped>
-.comment-form {
-  margin: 2rem 0 2rem 0;
-}
 </style>
