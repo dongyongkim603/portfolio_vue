@@ -12,7 +12,7 @@
                   <div class="media-content">
                     <p class="title is-5">{{ forum.name }}</p>
                     <p class="title is-6">{{ forum.get_category }}</p>
-                    <!-- <p class="subtitle is-6">By {{ forum.author }}</p> -->
+                    <p class="subtitle is-6">By {{ forum.get_creator_name }}</p>
                     <img :src="forum.get_image" :alt="`image of ${forum.name}`"/>
                     <p>{{ forum.description }}</p>
                     <router-link class="button is-small is-primary" v-bind:to="forum.get_absolute_url">
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import apiCall from '../helpers/apiCall'
+import apiCall from '../../helpers/apiCall'
 
 export default {
   data() {
@@ -65,7 +65,7 @@ export default {
       console.error(err.message)
       return []
     })
-
+console.log(forums)
     const categories = 
     await apiCall(
       'get',

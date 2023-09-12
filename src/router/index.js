@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import Forum from '../views/Forum.vue'
+import Forum from '../views/Forum/Forum.vue'
 import SignUp from '../views/SignUp.vue'
 import Login from '../views/Login.vue'
 import MyAccount from '../views/MyAccount.vue'
@@ -41,7 +41,7 @@ const routes = [
   {
     path: '/forums',
     name: 'forums',
-    component: () => import(/* webpackChunkName: "about" */ '../views/ForumsView.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../views/Forum/ForumsView.vue')
   },
   {
     path: '/:category_slug/:forum_slug/',

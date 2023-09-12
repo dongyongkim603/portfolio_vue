@@ -27,9 +27,9 @@
 </template>
 
 <script>
-import apiCall from '../helpers/apiCall'
-import Comment from './../components/Comment/index.vue';
-import CommentForm from './../components/Comment/CommentForm.vue';
+import apiCall from '../../helpers/apiCall'
+import Comment from '../../components/Comment/index.vue';
+import CommentForm from '../../components/Comment/CommentForm.vue';
 
 export default {
   name: 'Forum',
