@@ -3,6 +3,10 @@
     <section class="section">
       <div class="container">
         <h1 class="title">Forums</h1>
+        <router-link class="button is-small is-link" :to="'/create-forum'">
+          Create New Forum
+        </router-link>
+        <hr>
         <div class="columns">
           <div class="column is-8">
             <div class="box">
@@ -91,6 +95,15 @@ console.log(forums)
 };
 </script>
 
-<style>
-/* Add your Bulma and custom styles here */
+<style lang="scss" scoped>
+  .box{
+    &.create-forum {
+      width: 66.66666674%;
+      margin: auto;
+    }
+  }
+
+  .center-section {
+    align-items: center;
+  }
 </style>
