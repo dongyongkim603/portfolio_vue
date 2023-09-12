@@ -9,7 +9,7 @@
             <div class="field">
               <label class="label">Forum Name</label>
               <div class="control">
-                <input 
+                <input
                   class="input is-primary"
                   type="text"
                   placeholder="Primary input"
@@ -20,11 +20,11 @@
             </div>
             <label class="label">Category</label>
             <div class="select">
-              <select v-model="selectedCategoryId" :required="true">
+              <select v-model="selectedCategory" :required="true">
                 <option 
                   v-for="category in categories"
                   :key="category.id"
-                  :value="category.id"
+                  :value="category"
                 >
                   {{ category.name }}
                 </option>
@@ -76,6 +76,7 @@
 
 <script>
 import apiCall from '../../helpers/apiCall';
+import { toast } from 'bulma-toast'
 
 export default {
   props: {
@@ -87,7 +88,7 @@ export default {
       description: '',
       bannerImage: null,
       imagePreview: null,
-      selectedCategoryId: null,
+      selectedCategory: null,
       categories: [],
     };
   },
@@ -108,8 +109,37 @@ export default {
     this.categories = categories
   },
   methods: {
-    displayCategory(category) {
-      return category?.name
+    async checkIfForumExists() {
+      return await apiCall(
+        'get',
+        `forums/${this.selectedCategory.slug}/${this.slugify(this.forumName)}/`,
+        this.$store.state.token)
+        .then(response => {
+          if(response.status === 200) {
+            toast({
+              message: 'Forum with this title already exists.',
+              type: 'is-warning',
+              dismissible: true,
+              pauseOnHover: true,
+              duration: 2000,
+              position: 'bottom-right'
+            })
+            return true
+          }
+          return false
+        })
+        .catch(err => {
+          console.error(err.message)
+          return false
+        })
+    },
+    slugify(str) {
+      str = str.replace(/^\s+|\s+$/g, '');
+      str = str.toLowerCase();
+      str = str.replace(/[^a-z0-9 -]/g, '')
+              .replace(/\s+/g, '-')
+              .replace(/-+/g, '-');
+      return str;
     },
     handleFileChange(event) {
       const file = event.target.files[0]
@@ -119,30 +149,37 @@ export default {
           this.imagePreview = reader.result
         }
         reader.readAsDataURL(file)
-        this.bannerImage = file
+        this.bannerImage = new FormData()
+        this.bannerImage.append('image', file)
       }
     },
     async submitForum() {
-      await apiCall(
-        'post',
-        'forums/',
-        this.$store.state.token,
-        {
-          creator: 1,
-          creator_details: 1,
-          category: this.selectedCategoryId,
-          name: this.forumName,
-          description: this.description,
-          image: this.bannerImage
-        })
-        .catch(err => {
-          console.error(err.message)
-          return
-        })
-
-      this.forumName = ''
-      this.description = ''
-      this.bannerImage = null
+      if(await this.checkIfForumExists()) {
+        return 
+      } else {
+        await apiCall(
+          'post',
+          'forums/',
+          this.$store.state.token,
+          {
+            creator: 1,
+            creator_details: 1,
+            category: this.selectedCategory.id,
+            name: this.forumName,
+            description: this.description,
+            image: this.bannerImage
+          },
+          { headers: {'Content-Type': 'multipart/form-data'}})
+          .catch(err => {
+            console.error(err.message)
+            return
+          })
+  
+        this.$router.push(`forums/${this.selectedCategory.slug}/${this.slugify(this.forumName)}/`)
+        this.forumName = ''
+        this.description = ''
+        this.bannerImage = null
+      }
     }
   }
 };
