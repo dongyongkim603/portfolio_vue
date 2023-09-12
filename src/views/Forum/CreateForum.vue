@@ -175,7 +175,7 @@ export default {
             return
           })
   
-        this.$router.push(`forums/${this.selectedCategory.slug}/${this.slugify(this.forumName)}/`)
+        this.$router.push(`/${this.selectedCategory.slug}/${this.slugify(this.forumName)}/`)
         this.forumName = ''
         this.description = ''
         this.bannerImage = null
