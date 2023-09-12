@@ -4,12 +4,31 @@
       <div class="container">
         <div class="comment-form">
           <h3 class="title is-4">Create a New Forum</h3>
+          <hr/>
           <form @submit.prevent="submitForum">
             <div class="field">
               <label class="label">Forum Name</label>
               <div class="control">
-                <input class="input is-primary" type="text" placeholder="Primary input">
+                <input 
+                  class="input is-primary"
+                  type="text"
+                  placeholder="Primary input"
+                  :required="true"
+                  v-model="forumName"
+                >
               </div>
+            </div>
+            <label class="label">Category</label>
+            <div class="select">
+              <select v-model="selectedCategoryId" :required="true">
+                <option 
+                  v-for="category in categories"
+                  :key="category.id"
+                  :value="category.id"
+                >
+                  {{ category.name }}
+                </option>
+              </select>
             </div>
             <div class="field">
               <label class="label">Description</label>
@@ -68,31 +87,50 @@ export default {
       description: '',
       bannerImage: null,
       imagePreview: null,
+      selectedCategoryId: null,
+      categories: [],
     };
   },
+  async mounted() {
+    const categories = 
+    await apiCall(
+      'get',
+      'categories/',
+      this.$store.state.token)
+    .then(response => {
+      return response?.data
+    })
+    .catch(err => {
+      console.error(err.message)
+      return []
+    })
+
+    this.categories = categories
+  },
   methods: {
+    displayCategory(category) {
+      return category?.name
+    },
     handleFileChange(event) {
-      const file = event.target.files[0];
-
+      const file = event.target.files[0]
       if (file && file.type.startsWith('image/')) {
-        const reader = new FileReader();
-
+        const reader = new FileReader()
         reader.onload = () => {
-          this.imagePreview = reader.result; // Store the image data URI for preview
-        };
-
-        reader.readAsDataURL(file); // Read the selected file as a data URL
+          this.imagePreview = reader.result
+        }
+        reader.readAsDataURL(file)
+        this.bannerImage = file
       }
     },
     async submitForum() {
       await apiCall(
         'post',
-        'comments/',
+        'forums/',
         this.$store.state.token,
         {
           creator: 1,
           creator_details: 1,
-          category: 1,
+          category: this.selectedCategoryId,
           name: this.forumName,
           description: this.description,
           image: this.bannerImage
@@ -102,7 +140,6 @@ export default {
           return
         })
 
-      // Clear form fields
       this.forumName = ''
       this.description = ''
       this.bannerImage = null
@@ -112,4 +149,7 @@ export default {
 </script>
 
 <style scoped>
+.input-margin {
+  margin: 0 1rem 0 1rem 0;
+}
 </style>

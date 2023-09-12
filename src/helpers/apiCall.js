@@ -9,7 +9,8 @@ export default async function apiCall(method, path, token, body) {
   } else {
     axios.defaults.headers.common['Authorization'] = ""
   }
-
+  console.log(body)
+debugger
   let res = {}
   switch(method.toLowerCase()) {
     case "post":
