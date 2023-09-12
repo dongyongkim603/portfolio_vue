@@ -52,7 +52,7 @@ export default {
           console.error(err.message)
           return
         })
-      debugger
+        
       this.$emit('loadPostedComment');
 
       // Clear form fields

@@ -16,7 +16,7 @@
 <script>
 export default {
   props: {
-    imagesUrls: Array, // Corrected prop name here (with 's')
+    imagesUrls: Array,
     headline: String,
     carouselName: String,
   },
@@ -35,7 +35,7 @@ export default {
       }, 3000);
     },
     nextImage() {
-      this.currentIndex = (this.currentIndex + 1) % this.imagesUrls.length; // Corrected prop name here (with 's')
+      this.currentIndex = (this.currentIndex + 1) % this.imagesUrls.length;
     },
   },
 };
@@ -51,7 +51,6 @@ img {
 
 .carousel {
   width: 35rem;
-  
   margin: auto;
   background-color: #f0f0f0;
   padding: 2rem;

@@ -3,7 +3,7 @@
 const axios = require('axios');
 axios.defaults.baseURL = 'http://127.0.0.1:8000/api/v1/'
 
-export default async function apiCall(method, path, token, body) {
+export default async function apiCall(method, path, token, body, headers) {
   if(token) {
     axios.defaults.headers.common['Authorization'] = "Token " + token
   } else {
@@ -13,7 +13,7 @@ export default async function apiCall(method, path, token, body) {
   let res = {}
   switch(method.toLowerCase()) {
     case "post":
-      res = axios.post(path, body)
+      res = axios.post(path, body, headers)
         .then(response => {
           return response
         })

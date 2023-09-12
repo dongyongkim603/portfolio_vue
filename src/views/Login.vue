@@ -95,6 +95,7 @@ export default {
         localStorage.setItem('username', this.username)
         localStorage.setItem('token', token)
         localStorage.setItem('isSuper', userDetails.get_is_superuser)
+        localStorage.setItem('uid', userDetails.id)
         localStorage.setItem('age', userDetails.age)
         localStorage.setItem('dateJoined', userDetails.get_date_joined)
         localStorage.setItem('profileImageUrl', userDetails.get_profile_image)

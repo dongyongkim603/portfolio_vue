@@ -3,6 +3,10 @@
     <section class="section">
       <div class="container">
         <h1 class="title">Forums</h1>
+        <router-link class="button is-small is-link" :to="'/create-forum'">
+          Create New Forum
+        </router-link>
+        <hr>
         <div class="columns">
           <div class="column is-8">
             <div class="box">
@@ -12,7 +16,7 @@
                   <div class="media-content">
                     <p class="title is-5">{{ forum.name }}</p>
                     <p class="title is-6">{{ forum.get_category }}</p>
-                    <!-- <p class="subtitle is-6">By {{ forum.author }}</p> -->
+                    <p class="subtitle is-6">By {{ forum.get_creator_name }}</p>
                     <img :src="forum.get_image" :alt="`image of ${forum.name}`"/>
                     <p>{{ forum.description }}</p>
                     <router-link class="button is-small is-primary" v-bind:to="forum.get_absolute_url">
@@ -40,7 +44,7 @@
 </template>
 
 <script>
-import apiCall from '../helpers/apiCall'
+import apiCall from '../../helpers/apiCall'
 
 export default {
   data() {
@@ -65,7 +69,7 @@ export default {
       console.error(err.message)
       return []
     })
-
+console.log(forums)
     const categories = 
     await apiCall(
       'get',
@@ -91,6 +95,15 @@ export default {
 };
 </script>
 
-<style>
-/* Add your Bulma and custom styles here */
+<style lang="scss" scoped>
+  .box{
+    &.create-forum {
+      width: 66.66666674%;
+      margin: auto;
+    }
+  }
+
+  .center-section {
+    align-items: center;
+  }
 </style>
