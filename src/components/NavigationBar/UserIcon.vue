@@ -51,6 +51,7 @@ export default {
       localStorage.removeItem('dateJoined')
       localStorage.removeItem('profileImageUrl')
       localStorage.removeItem('thumbnailUrl')
+      localStorage.removeItem('uid')
 
       this.$store.commit('removeToken')
       this.$store.commit('removeUsername')

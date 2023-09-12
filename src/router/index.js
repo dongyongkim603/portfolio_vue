@@ -44,6 +44,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Forum/ForumsView.vue')
   },
   {
+    path: '/create-forum',
+    name: 'Create Forum',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Forum/CreateForum.vue')
+  },
+  {
     path: '/:category_slug/:forum_slug/',
     name: 'forum',
     component: Forum
