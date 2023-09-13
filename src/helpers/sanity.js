@@ -15,7 +15,7 @@ export async function fetchSanity(query) {
     })
     .catch(err => {
       console.error(err.message)
-      return null
+      return err.message
     })
 }
 
@@ -26,7 +26,7 @@ export async function fetchMultiple(ids) {
   })
   .catch(err => {
     console.error(err.message)
-    return null
+    return err.message
   })
 }
 
@@ -37,7 +37,7 @@ export async function createDocSanity(doc) {
     })
     .catch(err => {
       console.error(err.message)
-      return null
+      return err.message
     })
 }
 
@@ -48,37 +48,38 @@ export async function createIfNotExists(doc) {
     })
     .catch(err => {
       console.error(err.message)
-      return null
+      return err.message
     })
 }
 
 export async function createPostImage(postId, imageFile) {
-  console.log(process.env)
-  debugger
-//   const imageAsset = await client.assets.upload('image', imageFile)
+  const imageAsset = 
+  await client.assets.upload('image', imageFile)
+  .catch(err => {
+    console.error(err.message)
+    return err.message
+  })
 
+  const newPostImage = {
+    _type: 'post_image',
+    post_id: postId,
+    image: {
+      _type: 'image',
+      asset: {
+        _type: 'reference',
+        _ref: imageAsset._id,
+      },
+    },
+  };
   
-//   const newPostImage = {
-//     _type: 'post_image',
-//     post_id: postId,
-//     image: {
-//       _type: 'image',
-//       asset: {
-//         _type: 'reference',
-//         _ref: imageAsset._id,
-//       },
-//     },
-//   };
-// debugger
-  
-//   const createdPostImage = 
-//   await client.create(newPostImage)
-//   .catch(err => {
-//     console.error(err.message)
-//     return null
-//   });
+  const createdPostImage = 
+  await client.create(newPostImage)
+  .catch(err => {
+    console.error(err.message)
+    return err.message
+  });
 
-//   return createdPostImage;
+  return createdPostImage;
 }
 
 export async function createProfile(username, uid, profileImageFile, userImages = []) {
@@ -104,4 +105,18 @@ export async function createProfile(username, uid, profileImageFile, userImages 
   const createdProfile = await client.create(newProfile);
 
   return createdProfile;
+}
+
+export function transformFileName(inputFileName, newExtension) {
+  const fileNameWithoutPrefix = inputFileName.replace(/^image-/, '');
+  const fileExtensionMatch = fileNameWithoutPrefix.match(/-(\w+)$/);
+  if (fileExtensionMatch) {
+    const currentExtension = fileExtensionMatch[1];
+    const updatedFileName = fileNameWithoutPrefix.replace(
+      `-${currentExtension}`,
+      `.${newExtension}`
+    );
+    return updatedFileName;
+  }
+  return inputFileName;
 }

@@ -64,7 +64,12 @@
 
 <script>
 import apiCall from '../helpers/apiCall'
-import { createDocSanity, createIfNotExists, createPostImage } from '../helpers/sanity';
+import { 
+  createDocSanity,
+  createIfNotExists,
+  createPostImage,
+  transformFileName
+} from '../helpers/sanity';
 
 export default {
   name: 'MyAccount',
@@ -115,9 +120,28 @@ export default {
       }
     },
     async postUserChanges() {
-      const response = await createPostImage(2, this.imageFile)
-      console.log(response)
-      debugger
+      const sanityResponse = await createPostImage(2, this.imageFile)
+      .catch(err => {
+        console.error(err)
+      })
+      const imagePostUrl =
+      `https://cdn.sanity.io/images/vojqfqb8/production/${transformFileName(sanityResponse?.image?.asset?._ref)}`
+      const apiResponse = await apiCall(
+        'patch',
+        `profile/${this.username}/`,
+        this.$store.state.token,
+        {
+          user: 1,
+          age: 30,
+          bio: `testing adding a bio`,
+          profile_image: imagePostUrl,
+          thumbnail: imagePostUrl
+        })
+        .then(response => {
+          return response?.data
+        }).catch(err => {
+          console.error(err.message)
+        })
     },
     async fetchUserDetails() {
       return await apiCall(
