@@ -19,8 +19,19 @@ export async function fetchSanity(query) {
 }
 
 export async function createDocSanity(doc) {
-  return await client.create(query)
+  return await client.create(doc)
     .then(res => {
+      return res
+    })
+    .catch(err => {
+      console.error(err.message)
+      return null
+    })
+}
+
+export async function createIfNotExists(doc) {
+  return client.createIfNotExists(doc)
+    .then((res) => {
       return res
     })
     .catch(err => {

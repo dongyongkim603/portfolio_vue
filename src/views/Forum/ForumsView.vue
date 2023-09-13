@@ -69,7 +69,7 @@ export default {
       console.error(err.message)
       return []
     })
-console.log(forums)
+    
     const categories = 
     await apiCall(
       'get',

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>My Account</h1>
+    <h1 class="title">My Account</h1>
     <div class="card">
     <div v-if="profileImageUrl" class="card-image">
       <figure class="image is-4by3">
@@ -25,9 +25,34 @@
       <div class="content">
         {{bio}}
         <br>
-        Date joined <time :datetime="dateJoined">{{dateJoined}}</time>
+        Date joined <time :datetime="dateJoined">{{ dateJoined }}</time>
       </div>
     </div>
+  </div>
+  <div class="image-box">
+    <form @submit.prevent="uploadPhoto" class="image-item">
+      <img v-if="imagePreview" :src="imagePreview" alt="Image Preview" />
+      <div class="file is-centered is-medium is-boxed">
+        <label class="file-label">
+          <input 
+            ref="fileInput"
+            class="file-input"
+            type="file"
+            name="banner"
+            @change="handleFileChange"
+            accept="image/*"
+          >
+          <span class="file-cta">
+            <span class="file-icon">
+              <i class="fas fa-upload"></i>
+            </span>
+            <span class="file-label">
+              Upload Photo
+            </span>
+          </span>
+        </label>
+      </div>
+    </form>
   </div>
   </div>
 </template>
@@ -49,7 +74,9 @@ export default {
       lastName: '',
       isActive: '',
       bio: '',
-      dateJoined: ''
+      dateJoined: '',
+      uploadImage: null,
+      imagePreview: null,
     };
   },
   beforeCreate() {
@@ -68,6 +95,18 @@ export default {
     this.bio = userDetails?.bio || ''
   },
   methods: {
+    handleFileChange(event) {
+      const file = event.target.files[0]
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader()
+        reader.onload = () => {
+          this.imagePreview = reader.result
+        }
+        reader.readAsDataURL(file)
+        this.uploadImage = new FormData()
+        this.uploadImage.append('image', file)
+      }
+    },
     async fetchUserDetails() {
       return await apiCall(
         'get',
@@ -105,5 +144,14 @@ export default {
 .image {
   max-width: 100%;
   height: auto;
+}
+
+.image-box {
+  margin: 1rem;
+  display: flex;
+}
+
+.image-item {
+  margin: auto;
 }
 </style>
