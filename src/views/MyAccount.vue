@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <h1 class="title">My Account</h1>
     <div class="card">
     <div v-if="profileImageUrl" class="card-image">
@@ -29,8 +29,8 @@
       </div>
     </div>
   </div>
-  <div class="image-box">
-    <form @submit.prevent="uploadPhoto" class="image-item">
+  <div class="box">
+    <form @submit.prevent="postUserChanges" class="image-item">
       <img v-if="imagePreview" :src="imagePreview" alt="Image Preview" />
       <div class="file is-centered is-medium is-boxed">
         <label class="file-label">
@@ -52,6 +52,11 @@
           </span>
         </label>
       </div>
+      <div class="field">
+        <div class="control">
+          <button class="button is-dark">Upload</button>
+        </div>
+      </div>
     </form>
   </div>
   </div>
@@ -59,6 +64,7 @@
 
 <script>
 import apiCall from '../helpers/apiCall'
+import { createDocSanity, createIfNotExists, createPostImage } from '../helpers/sanity';
 
 export default {
   name: 'MyAccount',
@@ -77,6 +83,7 @@ export default {
       dateJoined: '',
       uploadImage: null,
       imagePreview: null,
+      imageFile: null
     };
   },
   beforeCreate() {
@@ -96,16 +103,21 @@ export default {
   },
   methods: {
     handleFileChange(event) {
-      const file = event.target.files[0]
-      if (file && file.type.startsWith('image/')) {
+      this.imageFile = event.target.files[0]
+      if (this.imageFile && this.imageFile.type.startsWith('image/')) {
         const reader = new FileReader()
         reader.onload = () => {
           this.imagePreview = reader.result
         }
-        reader.readAsDataURL(file)
+        reader.readAsDataURL(this.imageFile)
         this.uploadImage = new FormData()
-        this.uploadImage.append('image', file)
+        this.uploadImage.append('image', this.imageFile)
       }
+    },
+    async postUserChanges() {
+      const response = await createPostImage(2, this.imageFile)
+      console.log(response)
+      debugger
     },
     async fetchUserDetails() {
       return await apiCall(
@@ -122,8 +134,11 @@ export default {
 };
 </script>
 
-<style>
-/* Add your Bulma and custom styles here */
+<style scoped>
+button {
+  margin: 1rem auto;
+}
+
 .container {
   margin-top: 20px;
 }
@@ -153,5 +168,19 @@ export default {
 
 .image-item {
   margin: auto;
+}
+
+.control {
+  display: flex;
+}
+
+.box {
+  margin: 1rem auto;
+  width: 50%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
 }
 </style>
