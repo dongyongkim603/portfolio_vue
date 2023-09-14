@@ -97,12 +97,12 @@ export default {
     const userDetails = await this.fetchUserDetails()
     this.user_id = userDetails?.get_user_id || null
     const sanityUser = 
-    await this.fetchSanity(`*[_type == "profile" && uid == "${this.user_id}"]{
+    await fetchSanity(`*[_type == "profile" && uid == ${this.user_id}]{
       _id,
       uid,
       username
     }`)
-    this.sanityProfileId = sanityUser._id
+    this.sanityProfileId = sanityUser[0]._id
     this.age = userDetails?.age || null
     this.email = userDetails?.get_email || ''
     this.firstName = userDetails?.get_first_name || ''
@@ -127,7 +127,7 @@ export default {
     },
     async postUserChanges() {
       const sanityResponse = 
-      await createProfile(this.username, this.user_id, this.imageFile)
+      await createProfile(this.sanityProfileId, this.username, this.user_id, this.imageFile)
         .catch(err => {
           console.error(err)
         })

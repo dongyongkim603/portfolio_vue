@@ -21,8 +21,9 @@ const newPostImage = (postId, imageAsset) => {
   }
 };
 
-const newProfile = (username, uid, profileImageAsset, userImages) => {
+const newProfile = (_id, username, uid, profileImageAsset, userImages) => {
   return {
+    _id: _id,
     _type: 'profile',
     username: username,
     uid: uid,
@@ -81,6 +82,17 @@ export async function createIfNotExists(doc) {
     })
 }
 
+export async function createOrReplace(doc) {
+  client.createOrReplace(doc)
+  .then((res) => {
+    return res
+  })
+  .catch(err => {
+    console.error(err.message)
+    return err.message
+  })
+}
+
 export async function createPostImage(postId, imageFile) {
   const imageAsset = 
   await client.assets.upload('image', imageFile)
@@ -101,15 +113,19 @@ export async function createPostImage(postId, imageFile) {
   return createdPostImage;
 }
 
-export async function createProfile(username, uid, profileImageFile, userImages = []) {
+export async function createProfile(_id, username, uid, profileImageFile, userImages = []) {
   const profileImageAsset = await client.assets.upload('image', profileImageFile)
+  const profile = newProfile(_id, username, uid, profileImageAsset, userImages)
+  const err = await createOrReplace(profile)
+  .catch(err => {
+    console.error(err.message)
+    return err
+  })
 
-  const profile = newProfile(username, uid, profileImageAsset, userImages)
-
-  const createdProfile = await client.create(profile)
-
+  if(err) {
+    return err
+  }
   return {
-    createdProfile,
     profileImageAsset,
     profile
   };
