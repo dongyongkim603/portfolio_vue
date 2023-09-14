@@ -52,7 +52,7 @@
           </span>
         </label>
       </div>
-      <div class="field">
+      <div v-if="imagePreview" class="field">
         <div class="control">
           <button class="button is-dark">Upload</button>
         </div>
@@ -65,10 +65,8 @@
 <script>
 import apiCall from '../helpers/apiCall'
 import { 
-  createDocSanity,
-  createIfNotExists,
-  createPostImage,
-  transformFileName
+  createProfile,
+  fetchSanity
 } from '../helpers/sanity';
 
 export default {
@@ -88,7 +86,8 @@ export default {
       dateJoined: '',
       uploadImage: null,
       imagePreview: null,
-      imageFile: null
+      imageFile: null,
+      sanityProfileId: null
     };
   },
   beforeCreate() {
@@ -97,6 +96,13 @@ export default {
   async mounted() {
     const userDetails = await this.fetchUserDetails()
     this.user_id = userDetails?.get_user_id || null
+    const sanityUser = 
+    await this.fetchSanity(`*[_type == "profile" && uid == "${this.user_id}"]{
+      _id,
+      uid,
+      username
+    }`)
+    this.sanityProfileId = sanityUser._id
     this.age = userDetails?.age || null
     this.email = userDetails?.get_email || ''
     this.firstName = userDetails?.get_first_name || ''
@@ -120,22 +126,24 @@ export default {
       }
     },
     async postUserChanges() {
-      const sanityResponse = await createPostImage(2, this.imageFile)
-      .catch(err => {
-        console.error(err)
-      })
-      const imagePostUrl =
-      `https://cdn.sanity.io/images/vojqfqb8/production/${transformFileName(sanityResponse?.image?.asset?._ref)}`
+      const sanityResponse = 
+      await createProfile(this.username, this.user_id, this.imageFile)
+        .catch(err => {
+          console.error(err)
+        })
+
+      const imageUrl = sanityResponse.profileImageAsset.url
+
       const apiResponse = await apiCall(
         'patch',
-        `profile/${this.username}/`,
+        `edit-profile/${this.user_id}/`,
         this.$store.state.token,
         {
-          user: 1,
+          user: this.user_id,
           age: 30,
           bio: `testing adding a bio`,
-          profile_image: imagePostUrl,
-          thumbnail: imagePostUrl
+          profile_image: imageUrl,
+          thumbnail: imageUrl
         })
         .then(response => {
           return response?.data

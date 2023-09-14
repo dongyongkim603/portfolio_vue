@@ -8,6 +8,35 @@ const client = createClient({
   apiVersion: '2023-05-03',
 })
 
+const newPostImage = (postId, imageAsset) => {
+  return {_type: 'post_image',
+    post_id: postId,
+    image: {
+      _type: 'image',
+      asset: {
+        _type: 'reference',
+        _ref: imageAsset._id,
+      },
+    },
+  }
+};
+
+const newProfile = (username, uid, profileImageAsset, userImages) => {
+  return {
+    _type: 'profile',
+    username: username,
+    uid: uid,
+    profileImage: {
+      _type: 'image',
+      asset: {
+        _type: 'reference',
+        _ref: profileImageAsset._id,
+      },
+    },
+    usersImages: userImages,
+  }
+}
+
 export async function fetchSanity(query) {
   return await client.fetch(query)
     .then(res => {
@@ -60,20 +89,10 @@ export async function createPostImage(postId, imageFile) {
     return err.message
   })
 
-  const newPostImage = {
-    _type: 'post_image',
-    post_id: postId,
-    image: {
-      _type: 'image',
-      asset: {
-        _type: 'reference',
-        _ref: imageAsset._id,
-      },
-    },
-  };
+  const image = newPostImage(postId, imageAsset)
   
   const createdPostImage = 
-  await client.create(newPostImage)
+  await client.create(image)
   .catch(err => {
     console.error(err.message)
     return err.message
@@ -83,31 +102,25 @@ export async function createPostImage(postId, imageFile) {
 }
 
 export async function createProfile(username, uid, profileImageFile, userImages = []) {
-  // Upload the profile image to Sanity and get the image asset's reference
-  const profileImageAsset = await client.assets.upload('image', profileImageFile);
+  const profileImageAsset = await client.assets.upload('image', profileImageFile)
 
-  // Create a new profile document
-  const newProfile = {
-    _type: 'profile',
-    username: username,
-    uid: uid,
-    profileImage: {
-      _type: 'image',
-      asset: {
-        _type: 'reference',
-        _ref: profileImageAsset._id, // Reference to the uploaded profile image asset
-      },
-    },
-    usersImages: userImages, // You can pass an array of user images here
+  const profile = newProfile(username, uid, profileImageAsset, userImages)
+
+  const createdProfile = await client.create(profile)
+
+  return {
+    createdProfile,
+    profileImageAsset,
+    profile
   };
-
-  // Use the client to create the new document
-  const createdProfile = await client.create(newProfile);
-
-  return createdProfile;
 }
 
-export function transformFileName(inputFileName, newExtension) {
+export function imagePostUrl(ref) {
+  return `${process.env.VUE_APP_SANITY_IMAGE_URL}/${process.env.VUE_APP_SANITY_PROJECT_ID}` + 
+  `/${process.env.VUE_APP_SANITY_DATASET}/${transformFileName(ref)}`
+}
+
+function transformFileName(inputFileName, newExtension) {
   const fileNameWithoutPrefix = inputFileName.replace(/^image-/, '');
   const fileExtensionMatch = fileNameWithoutPrefix.match(/-(\w+)$/);
   if (fileExtensionMatch) {
