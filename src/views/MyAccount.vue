@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>My Account</h1>
+  <div class="container">
+    <h1 class="title">My Account</h1>
     <div class="card">
     <div v-if="profileImageUrl" class="card-image">
       <figure class="image is-4by3">
@@ -25,15 +25,49 @@
       <div class="content">
         {{bio}}
         <br>
-        Date joined <time :datetime="dateJoined">{{dateJoined}}</time>
+        Date joined <time :datetime="dateJoined">{{ dateJoined }}</time>
       </div>
     </div>
+  </div>
+  <div class="box">
+    <form @submit.prevent="postUserChanges" class="image-item">
+      <img v-if="imagePreview" :src="imagePreview" alt="Image Preview" />
+      <div class="file is-centered is-medium is-boxed">
+        <label class="file-label">
+          <input 
+            ref="fileInput"
+            class="file-input"
+            type="file"
+            name="banner"
+            @change="handleFileChange"
+            accept="image/*"
+          >
+          <span class="file-cta">
+            <span class="file-icon">
+              <i class="fas fa-upload"></i>
+            </span>
+            <span class="file-label">
+              Upload Photo
+            </span>
+          </span>
+        </label>
+      </div>
+      <div v-if="imagePreview" class="field">
+        <div class="control">
+          <button class="button is-dark">Upload</button>
+        </div>
+      </div>
+    </form>
   </div>
   </div>
 </template>
 
 <script>
 import apiCall from '../helpers/apiCall'
+import { 
+  createProfile,
+  fetchSanity
+} from '../helpers/sanity';
 
 export default {
   name: 'MyAccount',
@@ -49,7 +83,11 @@ export default {
       lastName: '',
       isActive: '',
       bio: '',
-      dateJoined: ''
+      dateJoined: '',
+      uploadImage: null,
+      imagePreview: null,
+      imageFile: null,
+      sanityProfileId: null
     };
   },
   beforeCreate() {
@@ -58,6 +96,13 @@ export default {
   async mounted() {
     const userDetails = await this.fetchUserDetails()
     this.user_id = userDetails?.get_user_id || null
+    const sanityUser = 
+    await fetchSanity(`*[_type == "profile" && uid == ${this.user_id}]{
+      _id,
+      uid,
+      username
+    }`)
+    this.sanityProfileId = sanityUser[0]._id
     this.age = userDetails?.age || null
     this.email = userDetails?.get_email || ''
     this.firstName = userDetails?.get_first_name || ''
@@ -68,6 +113,44 @@ export default {
     this.bio = userDetails?.bio || ''
   },
   methods: {
+    handleFileChange(event) {
+      this.imageFile = event.target.files[0]
+      if (this.imageFile && this.imageFile.type.startsWith('image/')) {
+        const reader = new FileReader()
+        reader.onload = () => {
+          this.imagePreview = reader.result
+        }
+        reader.readAsDataURL(this.imageFile)
+        this.uploadImage = new FormData()
+        this.uploadImage.append('image', this.imageFile)
+      }
+    },
+    async postUserChanges() {
+      const sanityResponse = 
+      await createProfile(this.sanityProfileId, this.username, this.user_id, this.imageFile)
+        .catch(err => {
+          console.error(err)
+        })
+
+      const imageUrl = sanityResponse.profileImageAsset.url
+
+      const apiResponse = await apiCall(
+        'patch',
+        `edit-profile/${this.user_id}/`,
+        this.$store.state.token,
+        {
+          user: this.user_id,
+          age: 30,
+          bio: `testing adding a bio`,
+          profile_image: imageUrl,
+          thumbnail: imageUrl
+        })
+        .then(response => {
+          return response?.data
+        }).catch(err => {
+          console.error(err.message)
+        })
+    },
     async fetchUserDetails() {
       return await apiCall(
         'get',
@@ -83,8 +166,11 @@ export default {
 };
 </script>
 
-<style>
-/* Add your Bulma and custom styles here */
+<style scoped>
+button {
+  margin: 1rem auto;
+}
+
 .container {
   margin-top: 20px;
 }
@@ -105,5 +191,28 @@ export default {
 .image {
   max-width: 100%;
   height: auto;
+}
+
+.image-box {
+  margin: 1rem;
+  display: flex;
+}
+
+.image-item {
+  margin: auto;
+}
+
+.control {
+  display: flex;
+}
+
+.box {
+  margin: 1rem auto;
+  width: 50%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
 }
 </style>

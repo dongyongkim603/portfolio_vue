@@ -22,6 +22,16 @@ export default async function apiCall(method, path, token, body, headers) {
           return { message: err.message }
         })
       break
+    case "patch":
+      res = axios.patch(path, body, headers)
+        .then(response => {
+          return response
+        })
+        .catch(err => {
+          console.error(err.message)
+          return { message: err.message }
+        })
+      break
     case "get":
       res = await axios.get(path)
         .then(response => {
