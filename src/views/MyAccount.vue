@@ -1,64 +1,70 @@
 <template>
   <div class="container">
+    <PopupMenu ></PopupMenu>
     <h1 class="title">My Account</h1>
     <div class="card">
-    <div v-if="profileImageUrl" class="card-image">
-      <figure class="image is-4by3">
-        <img :src="profileImageUrl" :alt="`Profile image of ${username}`">
-      </figure>
-    </div>
-    <div class="card-content">
-      <div class="media">
-        <div v-if="thumbnailUrl" class="media-left">
-          <figure class="image is-48x48">
-            <img :src="thumbnailUrl" :alt="`Thumbnail image of ${username}`">
-          </figure>
-        </div>
-        <div class="media-content">
-          <p v-if="firstName || lastName" class="title is-4">
-            {{`${firstName} ${lastName}`}}
-          </p>
-          <p v-if="email" class="subtitle is-6">{{ email }}</p>
-        </div>
+      <div v-if="profileImageUrl" class="card-image">
+        <figure class="image is-4by3">
+          <img :src="profileImageUrl" :alt="`Profile image of ${username}`">
+        </figure>
       </div>
+      <div class="card-content">
+        <div class="media">
+          <div v-if="thumbnailUrl" class="media-left">
+            <figure class="image is-48x48">
+              <img :src="thumbnailUrl" :alt="`Thumbnail image of ${username}`">
+            </figure>
+          </div>
+          <div class="media-content">
+            <p v-if="firstName || lastName" class="title is-4">
+              {{`${firstName} ${lastName}`}}
+            </p>
+            <p v-if="email" class="subtitle is-6">{{ email }}</p>
+          </div>
+        </div>
 
-      <div class="content">
-        {{bio}}
-        <br>
-        Date joined <time :datetime="dateJoined">{{ dateJoined }}</time>
-      </div>
-    </div>
-  </div>
-  <div class="box">
-    <form @submit.prevent="postUserChanges" class="image-item">
-      <img v-if="imagePreview" :src="imagePreview" alt="Image Preview" />
-      <div class="file is-centered is-medium is-boxed">
-        <label class="file-label">
-          <input 
-            ref="fileInput"
-            class="file-input"
-            type="file"
-            name="banner"
-            @change="handleFileChange"
-            accept="image/*"
-          >
-          <span class="file-cta">
-            <span class="file-icon">
-              <i class="fas fa-upload"></i>
-            </span>
-            <span class="file-label">
-              Upload Photo
-            </span>
-          </span>
-        </label>
-      </div>
-      <div v-if="imagePreview" class="field">
-        <div class="control">
-          <button class="button is-dark">Upload</button>
+        <div class="content">
+          {{bio}}
+          <br>
+          Date joined <time :datetime="dateJoined">{{ dateJoined }}</time>
         </div>
       </div>
-    </form>
-  </div>
+      <div class="field">
+        <div class="control">
+          <button class="button is-primary" @click="() => openPopup = !openPopup">Edit Profile</button>
+        </div>
+      </div>
+    </div>
+    <div class="box">
+      <form @submit.prevent="postUserChanges" class="image-item">
+        <img v-if="imagePreview" :src="imagePreview" alt="Image Preview" />
+        <div class="file is-centered is-medium is-boxed">
+          <label class="file-label">
+            <input 
+              ref="fileInput"
+              class="file-input"
+              type="file"
+              name="banner"
+              @change="handleFileChange"
+              accept="image/*"
+            >
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fas fa-upload"></i>
+              </span>
+              <span class="file-label">
+                Upload Photo
+              </span>
+            </span>
+          </label>
+        </div>
+        <div v-if="imagePreview" class="field">
+          <div class="control">
+            <button class="button is-dark">Upload</button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -68,9 +74,13 @@ import {
   createProfile,
   fetchSanity
 } from '../helpers/sanity';
+import PopupMenu from '../components/PopupMenu/index.vue'
 
 export default {
   name: 'MyAccount',
+  components: {
+    PopupMenu
+  },
   data() {
     return {
       username: this.$store.state.username || '',
@@ -84,6 +94,7 @@ export default {
       isActive: '',
       bio: '',
       dateJoined: '',
+      openPopup: false,
       uploadImage: null,
       imagePreview: null,
       imageFile: null,
@@ -124,6 +135,9 @@ export default {
         this.uploadImage = new FormData()
         this.uploadImage.append('image', this.imageFile)
       }
+    },
+    async editUserProfile () {
+      
     },
     async postUserChanges() {
       const sanityResponse = 
