@@ -59,7 +59,7 @@
 <script>
 import apiCall from '../../helpers/apiCall'
 import { 
-  createProfile,
+  createOrReplaceProfile,
   fetchSanity
 } from '../../helpers/sanity';
 
@@ -84,7 +84,8 @@ export default {
       formattedBirthday: this.formatDate(this.birth),
       popupActive: this.isOpen,
       imageFile: null,
-      imagePreview: null
+      imagePreview: null,
+      uploadImage:null
     };
   },
   methods: {
@@ -110,7 +111,7 @@ export default {
 
       if(this.imageFile) {
         sanityResponse = 
-        await createProfile(this.sanityProfileId, this.username, this.uid, this.imageFile)
+        await createOrReplaceProfile(this.sanityProfileId, this.username, this.uid, this.imageFile)
           .catch(err => {
             console.error(err)
             return
