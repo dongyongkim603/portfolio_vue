@@ -158,6 +158,7 @@ export default {
       this.bio = this.biography
       this.username = this.userName
       this.popupActive = true;
+      this.formattedBirthday = this.formatDate(this.birth)
       this.$nextTick(() => {
         this.$refs.popup.focus();
       });
