@@ -1,6 +1,13 @@
 <template> 
   <div class="box post">
-    <img v-if="imageUrl" :src="imageUrl" alt="Image Preview" />
+    <div class="image-container">
+      <img 
+        v-if="imageUrl"
+        :src="imageUrl"
+        alt="Image Preview"
+        class="image"
+      />
+    </div>
     <div class="content user-details">
       <div>
         <b>Date Posted: </b>{{postDate}}
@@ -52,8 +59,8 @@ button {
 }
 
 .image {
-  max-width: 100%;
-  height: auto;
+  height: 100%;
+  width: 100%;
 }
 
 .image-box {
@@ -73,11 +80,20 @@ button {
   margin: 1rem auto;
   &.post {
     width: 100%;
+    height: 100%;
   }
 }
 
 .container {
   display: flex;
   flex-direction: column;
+}
+
+.image-container {
+  display: flex;
+  margin: 1rem auto;
+  width: 80%;
+  height: 60%;
+  box-shadow: 1.5px 1.5px 1.5px 1.5px #00c4a7;
 }
 </style>

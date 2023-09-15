@@ -209,20 +209,18 @@ button {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  margin: -5px; /* Add negative margin to compensate for spacing between items */
+  margin: -5px;
 }
 
-/* Individual post item */
 .post {
-  flex: 0 0 calc(33.33% - 10px); /* 33.33% width with 10px spacing between items */
-  margin: 5px; /* Add margin between items */
-  box-sizing: border-box; /* Include padding and border in the width calculation */
+  flex: 0 0 calc(33.33% - 10px);
+  margin: 5px;
+  box-sizing: border-box;
 }
 
-/* Media query for mobile view */
 @media (max-width: 768px) {
   .post {
-    flex-basis: 100%; /* One item per row on mobile */
+    flex-basis: 100%;
   }
 }
 </style>
