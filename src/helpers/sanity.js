@@ -9,7 +9,8 @@ const client = createClient({
 })
 
 const newPostImage = (postId, imageAsset) => {
-  return {_type: 'post_image',
+  return {
+    _type: 'post_image',
     post_id: postId,
     image: {
       _type: 'image',
@@ -113,7 +114,7 @@ export async function createPostImage(postId, imageFile) {
   return createdPostImage;
 }
 
-export async function createProfile(_id, username, uid, profileImageFile, userImages = []) {
+export async function createOrReplaceProfile(_id, username, uid, profileImageFile, userImages = []) {
   const profileImageAsset = await client.assets.upload('image', profileImageFile)
   const profile = newProfile(_id, username, uid, profileImageAsset, userImages)
   const err = await createOrReplace(profile)
@@ -129,6 +130,28 @@ export async function createProfile(_id, username, uid, profileImageFile, userIm
     profileImageAsset,
     profile
   };
+}
+
+export async function prependUserPost(uid, postId, imageFile) {
+  try {
+    const imageAsset = await client.assets.upload('image', imageFile)
+    const postImage = newPostImage(imageAsset._id, imageAsset)
+    const response = await client
+      .patch('m91XOnio4LVIQdOZNBQoRh')
+      .setIfMissing({usersImages: []})
+      .prepend('usersImages', [
+        postImage
+      ])
+      .commit({autoGenerateArrayKeys: true})
+
+    return {
+      imageAsset,
+      response
+    };
+  } catch(err) {
+    console.error(err.message)
+    return err
+  }
 }
 
 export function imagePostUrl(ref) {

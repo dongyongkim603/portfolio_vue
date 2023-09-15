@@ -40,7 +40,7 @@
 <script>
 import apiCall from '../../helpers/apiCall'
 import { 
-  createProfile,
+  prependUserPost,
   fetchSanity
 } from '../../helpers/sanity';
 
@@ -75,30 +75,26 @@ export default {
       }
     },
     async postUserChanges() {
-      const sanityResponse = 
-      await createProfile(this.sanityProfileId, this.username, this.user_id, this.imageFile)
-        .catch(err => {
-          console.error(err)
-        })
-
-      const imageUrl = sanityResponse.profileImageAsset.url
-
-      const apiResponse = await apiCall(
-        'patch',
-        `edit-profile/${this.user_id}/`,
-        this.$store.state.token,
-        {
-          user: this.user_id,
-          age: 30,
-          bio: `testing adding a bio`,
-          profile_image: imageUrl,
-          thumbnail: imageUrl
-        })
-        .then(response => {
-          return response?.data
-        }).catch(err => {
-          console.error(err.message)
-        })
+      try {
+        const sanityResponse = 
+        await prependUserPost(this.user_id, this.imageFile.name, this.imageFile)
+        const imageUrl = sanityResponse.imageAsset.url
+        const apiResponse = await apiCall(
+          'post',
+          `user-posts/`,
+          this.$store.state.token,
+          {
+            creator: this.user_id,
+            creator_details: this.user_id,
+            description: this.description,
+            image_url: imageUrl,
+          })
+          .then(response => {
+            return response?.data
+          })
+      } catch(err) {
+        console.error(err.message)
+      }
     }
   }
 };

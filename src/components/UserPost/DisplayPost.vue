@@ -1,5 +1,5 @@
 <template> 
-  <div class="box">
+  <div class="box post">
     <img v-if="imageUrl" :src="imageUrl" alt="Image Preview" />
     <div class="content user-details">
       <div>
@@ -71,6 +71,9 @@ button {
 
 .box {
   margin: 1rem auto;
+  &.post {
+    width: 100%;
+  }
 }
 
 .container {
