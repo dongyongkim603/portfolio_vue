@@ -24,13 +24,13 @@
 
         <div class="content user-details">
           <div>
-            {{bio}}
+            <b>Bio: </b>{{bio}}
           </div>
           <div>
-            Date joined: <time :datetime="dateJoined">{{ dateJoined }}</time>
+            <b>Date joined:</b> <time :datetime="dateJoined">{{ dateJoined }}</time>
           </div>
           <div>
-            Birthday: <time :datetime="dateJoined">{{ birthday }}</time>
+            <b>Birthday:</b> <time :datetime="dateJoined">{{ birthday }}</time>
           </div>
         </div>
       </div>
