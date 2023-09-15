@@ -71,7 +71,6 @@ button {
 
 .box {
   margin: 1rem auto;
-  width: 50%;
 }
 
 .container {

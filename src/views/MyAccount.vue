@@ -48,13 +48,19 @@
       </div>
     </div>
     <CreatePost/>
-    <div v-for="userPost in userPosts" :key="userPost.id">
-      <DisplayPost 
-        :imageUrl="userPost.image_url"
-        :description="userPost.description"
-        :postDate="userPost.get_date_added"
-        :username="username"
-      />
+    <div class="post-container">
+      <div 
+        v-for="userPost in userPosts"
+        :key="userPost.id"
+        class="post"
+      >
+        <DisplayPost 
+          :imageUrl="userPost.image_url"
+          :description="userPost.description"
+          :postDate="userPost.get_date_added"
+          :username="username"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -153,10 +159,6 @@ button {
   width: 75%;
 }
 
-.container {
-  margin-top: 20px;
-}
-
 .title {
   font-size: 1.5rem;
   margin: 1.25rem auto;
@@ -200,5 +202,27 @@ button {
 .container {
   display: flex;
   flex-direction: column;
+  margin-top: 20px;
+}
+
+.post-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: -5px; /* Add negative margin to compensate for spacing between items */
+}
+
+/* Individual post item */
+.post {
+  flex: 0 0 calc(33.33% - 10px); /* 33.33% width with 10px spacing between items */
+  margin: 5px; /* Add margin between items */
+  box-sizing: border-box; /* Include padding and border in the width calculation */
+}
+
+/* Media query for mobile view */
+@media (max-width: 768px) {
+  .post {
+    flex-basis: 100%; /* One item per row on mobile */
+  }
 }
 </style>
