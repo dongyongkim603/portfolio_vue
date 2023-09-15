@@ -1,64 +1,82 @@
 <template>
   <div class="container">
-    <h1 class="title">My Account</h1>
+    <h1 class="title">{{`Hi ${username}!`}}</h1>
     <div class="card">
-    <div v-if="profileImageUrl" class="card-image">
-      <figure class="image is-4by3">
-        <img :src="profileImageUrl" :alt="`Profile image of ${username}`">
-      </figure>
-    </div>
-    <div class="card-content">
-      <div class="media">
-        <div v-if="thumbnailUrl" class="media-left">
-          <figure class="image is-48x48">
-            <img :src="thumbnailUrl" :alt="`Thumbnail image of ${username}`">
-          </figure>
-        </div>
-        <div class="media-content">
-          <p v-if="firstName || lastName" class="title is-4">
-            {{`${firstName} ${lastName}`}}
-          </p>
-          <p v-if="email" class="subtitle is-6">{{ email }}</p>
-        </div>
+      <div v-if="profileImageUrl" class="card-image">
+        <figure class="image is-4by3">
+          <img :src="profileImageUrl" :alt="`Profile image of ${username}`">
+        </figure>
       </div>
+      <div class="card-content">
+        <div class="media">
+          <div v-if="thumbnailUrl" class="media-left">
+            <figure class="image is-48x48">
+              <img :src="thumbnailUrl" :alt="`Thumbnail image of ${username}`">
+            </figure>
+          </div>
+          <div class="media-content">
+            <p v-if="firstName || lastName" class="title is-4">
+              {{`${firstName} ${lastName}`}}
+            </p>
+            <p v-if="email" class="subtitle is-6">{{ email }}</p>
+          </div>
+        </div>
 
-      <div class="content">
-        {{bio}}
-        <br>
-        Date joined <time :datetime="dateJoined">{{ dateJoined }}</time>
-      </div>
-    </div>
-  </div>
-  <div class="box">
-    <form @submit.prevent="postUserChanges" class="image-item">
-      <img v-if="imagePreview" :src="imagePreview" alt="Image Preview" />
-      <div class="file is-centered is-medium is-boxed">
-        <label class="file-label">
-          <input 
-            ref="fileInput"
-            class="file-input"
-            type="file"
-            name="banner"
-            @change="handleFileChange"
-            accept="image/*"
-          >
-          <span class="file-cta">
-            <span class="file-icon">
-              <i class="fas fa-upload"></i>
-            </span>
-            <span class="file-label">
-              Upload Photo
-            </span>
-          </span>
-        </label>
-      </div>
-      <div v-if="imagePreview" class="field">
-        <div class="control">
-          <button class="button is-dark">Upload</button>
+        <div class="content user-details">
+          <div>
+            <b>Bio: </b>{{bio}}
+          </div>
+          <div>
+            <b>Date joined:</b> <time :datetime="dateJoined">{{ dateJoined }}</time>
+          </div>
+          <div>
+            <b>Birthday:</b> <time :datetime="dateJoined">{{ birthday }}</time>
+          </div>
         </div>
       </div>
-    </form>
-  </div>
+      <div class="field">
+        <div class="control">
+          <PopupMenu
+            :uid="user_id"
+            :userName="username"
+            :biography="bio"
+            :birth="birthday"
+            :sanityProfileId="sanityProfileId"
+            :profileImageUrl="profileImageUrl"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="box">
+      <form @submit.prevent="postUserChanges" class="image-item">
+        <img v-if="imagePreview" :src="imagePreview" alt="Image Preview" />
+        <div class="file is-centered is-medium is-boxed">
+          <label class="file-label">
+            <input 
+              ref="fileInput"
+              class="file-input"
+              type="file"
+              name="banner"
+              @change="handleFileChange"
+              accept="image/*"
+            >
+            <span class="file-cta">
+              <span class="file-icon">
+                <i class="fas fa-upload"></i>
+              </span>
+              <span class="file-label">
+                Post Photo
+              </span>
+            </span>
+          </label>
+        </div>
+        <div v-if="imagePreview" class="field">
+          <div class="control">
+            <button class="button is-dark">Upload</button>
+          </div>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -68,15 +86,19 @@ import {
   createProfile,
   fetchSanity
 } from '../helpers/sanity';
+import PopupMenu from '../components/PopupMenu/index.vue'
 
 export default {
   name: 'MyAccount',
+  components: {
+    PopupMenu
+  },
   data() {
     return {
       username: this.$store.state.username || '',
       user_id: null,
       email: '',
-      age: null,
+      birthday: null,
       profileImageUrl: '',
       thumbnailUrl: '',
       firstName: '',
@@ -84,6 +106,7 @@ export default {
       isActive: '',
       bio: '',
       dateJoined: '',
+      openPopup: false,
       uploadImage: null,
       imagePreview: null,
       imageFile: null,
@@ -93,7 +116,7 @@ export default {
   beforeCreate() {
     document.title = 'John | My Account'
   },
-  async mounted() {
+  async created() {
     const userDetails = await this.fetchUserDetails()
     this.user_id = userDetails?.get_user_id || null
     const sanityUser = 
@@ -102,8 +125,8 @@ export default {
       uid,
       username
     }`)
-    this.sanityProfileId = sanityUser[0]._id
-    this.age = userDetails?.age || null
+    this.sanityProfileId = sanityUser[0]._id || 0
+    this.birthday = userDetails?.birthday || null
     this.email = userDetails?.get_email || ''
     this.firstName = userDetails?.get_first_name || ''
     this.lastName = userDetails?.get_last_name || ''
@@ -166,9 +189,14 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 button {
   margin: 1rem auto;
+}
+
+.card {
+  margin: auto;
+  width: 75%;
 }
 
 .container {
@@ -176,12 +204,16 @@ button {
 }
 
 .title {
-  font-size: 2rem;
-  margin-bottom: 20px;
+  font-size: 1.5rem;
+  margin: 1.25rem auto;
 }
 
 .content {
   margin-top: 20px;
+  &.user-details {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .column {
