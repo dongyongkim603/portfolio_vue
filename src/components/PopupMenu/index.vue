@@ -7,12 +7,12 @@
           Edit Profile
         </h1>
         <form @submit.prevent="postUserChanges">
-          <div class="field">
+          <!-- <div class="field">
             <label>Username</label>
             <div class="control">
               <input type="text" class="input" v-model="username">
             </div>
-          </div>
+          </div> -->
           <div class="field">
             <label>Bio</label>
             <div class="control">
@@ -25,6 +25,7 @@
               <input type="date" class="input" v-model="formattedBirthday">
             </div>
           </div>
+          <img v-if="imagePreview" :src="imagePreview" alt="Image Preview" />
           <div class="file is-centered is-medium is-boxed">
             <label class="file-label">
               <input 
@@ -56,12 +57,20 @@
 </template>
 
 <script>
+import apiCall from '../../helpers/apiCall'
+import { 
+  createProfile,
+  fetchSanity
+} from '../../helpers/sanity';
+
 export default {
   props: {
     uid: Number,
     userName: String,
     biography: String,
     birth: String,
+    sanityProfileId: String,
+    profileImageUrl: String,
     isOpen: {
       type: Boolean,
       default: false
@@ -75,6 +84,7 @@ export default {
       formattedBirthday: this.formatDate(this.birth),
       popupActive: this.isOpen,
       imageFile: null,
+      imagePreview: null
     };
   },
   methods: {
@@ -96,7 +106,41 @@ export default {
       return `${year}-${month}-${day}`;
     },
     async postUserChanges(){
-      
+      let sanityResponse
+
+      if(this.imageFile) {
+        sanityResponse = 
+        await createProfile(this.sanityProfileId, this.username, this.uid, this.imageFile)
+          .catch(err => {
+            console.error(err)
+            return
+          })
+        imageUrl = sanityResponse.profileImageAsset.url
+      }
+
+      const reqBody = {
+        user: this.uid,
+        birthday: this.formattedBirthday,
+        bio: this.bio,
+      }
+
+      if(this.imageUrl) {
+        reqBody['profile_image'] = this.imageUrl
+        reqBody['thumbnail'] = this.imageUrl
+      }
+
+      const apiResponse = await apiCall(
+        'patch',
+        `edit-profile/${this.uid}/`,
+        this.$store.state.token,
+        reqBody)
+        .then(response => {
+          return response?.data
+        }).catch(err => {
+          console.error(err.message)
+          return
+        })
+      this.$router.go(0)
     },
     handleFileChange(event) {
       this.imageFile = event.target.files[0]
@@ -111,7 +155,6 @@ export default {
       }
     },
     togglePopup() {
-      console.log(this.birthday)
       this.bio = this.biography
       this.username = this.userName
       this.popupActive = true;

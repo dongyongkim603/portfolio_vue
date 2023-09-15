@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1 class="title">My Account</h1>
+    <h1 class="title">{{`Hi ${username}!`}}</h1>
     <div class="card">
       <div v-if="profileImageUrl" class="card-image">
         <figure class="image is-4by3">
@@ -41,6 +41,8 @@
             :userName="username"
             :biography="bio"
             :birth="birthday"
+            :sanityProfileId="sanityProfileId"
+            :profileImageUrl="profileImageUrl"
           />
         </div>
       </div>
@@ -124,7 +126,6 @@ export default {
       username
     }`)
     this.sanityProfileId = sanityUser[0]._id || 0
-    console.log(userDetails)
     this.birthday = userDetails?.birthday || null
     this.email = userDetails?.get_email || ''
     this.firstName = userDetails?.get_first_name || ''
@@ -203,8 +204,8 @@ button {
 }
 
 .title {
-  font-size: 2rem;
-  margin: 1rem auto;
+  font-size: 1.5rem;
+  margin: 1.25rem auto;
 }
 
 .content {
