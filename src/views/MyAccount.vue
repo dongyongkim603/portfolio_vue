@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <PopupMenu ></PopupMenu>
     <h1 class="title">My Account</h1>
     <div class="card">
       <div v-if="profileImageUrl" class="card-image">
@@ -23,15 +22,26 @@
           </div>
         </div>
 
-        <div class="content">
-          {{bio}}
-          <br>
-          Date joined <time :datetime="dateJoined">{{ dateJoined }}</time>
+        <div class="content user-details">
+          <div>
+            {{bio}}
+          </div>
+          <div>
+            Date joined: <time :datetime="dateJoined">{{ dateJoined }}</time>
+          </div>
+          <div>
+            Birthday: <time :datetime="dateJoined">{{ birthday }}</time>
+          </div>
         </div>
       </div>
       <div class="field">
         <div class="control">
-          <button class="button is-primary" @click="() => openPopup = !openPopup">Edit Profile</button>
+          <PopupMenu
+            :uid="user_id"
+            :userName="username"
+            :biography="bio"
+            :birth="birthday"
+          />
         </div>
       </div>
     </div>
@@ -53,7 +63,7 @@
                 <i class="fas fa-upload"></i>
               </span>
               <span class="file-label">
-                Upload Photo
+                Post Photo
               </span>
             </span>
           </label>
@@ -86,7 +96,7 @@ export default {
       username: this.$store.state.username || '',
       user_id: null,
       email: '',
-      age: null,
+      birthday: null,
       profileImageUrl: '',
       thumbnailUrl: '',
       firstName: '',
@@ -104,7 +114,7 @@ export default {
   beforeCreate() {
     document.title = 'John | My Account'
   },
-  async mounted() {
+  async created() {
     const userDetails = await this.fetchUserDetails()
     this.user_id = userDetails?.get_user_id || null
     const sanityUser = 
@@ -113,8 +123,9 @@ export default {
       uid,
       username
     }`)
-    this.sanityProfileId = sanityUser[0]._id
-    this.age = userDetails?.age || null
+    this.sanityProfileId = sanityUser[0]._id || 0
+    console.log(userDetails)
+    this.birthday = userDetails?.birthday || null
     this.email = userDetails?.get_email || ''
     this.firstName = userDetails?.get_first_name || ''
     this.lastName = userDetails?.get_last_name || ''
@@ -135,9 +146,6 @@ export default {
         this.uploadImage = new FormData()
         this.uploadImage.append('image', this.imageFile)
       }
-    },
-    async editUserProfile () {
-      
     },
     async postUserChanges() {
       const sanityResponse = 
@@ -180,9 +188,14 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 button {
   margin: 1rem auto;
+}
+
+.card {
+  margin: auto;
+  width: 75%;
 }
 
 .container {
@@ -191,11 +204,15 @@ button {
 
 .title {
   font-size: 2rem;
-  margin-bottom: 20px;
+  margin: 1rem auto;
 }
 
 .content {
   margin-top: 20px;
+  &.user-details {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .column {

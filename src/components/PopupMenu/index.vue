@@ -1,9 +1,54 @@
 <template>
-  <div>
-    <button class="button is-primary" @click="togglePopup">Open Popup</button>
-    <div class="popup" v-if="popupActive">
+  <div class="edit-menu">
+    <button class="button is-primary" @click="togglePopup">Edit Profile</button>
+    <div class="popup" v-if="popupActive" ref="popup" @keydown.tab.prevent="trapFocus">
       <div class="popup-content">
-        <p>This is a custom popup menu.</p>
+        <h1 class="title is-3">
+          Edit Profile
+        </h1>
+        <form @submit.prevent="postUserChanges">
+          <div class="field">
+            <label>Username</label>
+            <div class="control">
+              <input type="text" class="input" v-model="username">
+            </div>
+          </div>
+          <div class="field">
+            <label>Bio</label>
+            <div class="control">
+              <textarea type="textarea" class="input" v-model="bio"/>
+            </div>
+          </div>
+          <div class="field">
+            <label>Birthday</label>
+            <div class="control">
+              <input type="date" class="input" v-model="formattedBirthday">
+            </div>
+          </div>
+          <div class="file is-centered is-medium is-boxed">
+            <label class="file-label">
+              <input 
+                ref="fileInput"
+                class="file-input"
+                type="file"
+                name="banner"
+                @change="handleFileChange"
+                accept="image/*"
+              >
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fas fa-upload"></i>
+                </span>
+                <span class="file-label">
+                  Change Profile Picture
+                </span>
+              </span>
+            </label>
+          </div>
+          <div class="control">
+            <button class="button is-dark">Submit</button>
+          </div>
+        </form>
         <button class="button is-danger" @click="closePopup">Close</button>
       </div>
     </div>
@@ -13,6 +58,10 @@
 <script>
 export default {
   props: {
+    uid: Number,
+    userName: String,
+    biography: String,
+    birth: String,
     isOpen: {
       type: Boolean,
       default: false
@@ -20,22 +69,84 @@ export default {
   },
   data() {
     return {
+      username: this.userName || '',
+      bio: this.biography || '',
+      birthday: this.parseDateString(this.birth) || new Date(),
+      formattedBirthday: this.formatDate(this.birth),
       popupActive: this.isOpen,
+      imageFile: null,
     };
   },
   methods: {
+    parseDateString(dateString) {
+      if(!dateString) {
+        return null;
+      }
+      const [year, month, day] = dateString.split('-').map(Number);
+      return new Date(year, month - 1, day);
+    },
+    formatDate(dateString) {
+      if (!dateString) {
+        return '';
+      }
+      const date = this.parseDateString(dateString);
+      const year = date.getFullYear();
+      const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 0-indexed months
+      const day = date.getDate().toString().padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    },
+    async postUserChanges(){
+      
+    },
+    handleFileChange(event) {
+      this.imageFile = event.target.files[0]
+      if (this.imageFile && this.imageFile.type.startsWith('image/')) {
+        const reader = new FileReader()
+        reader.onload = () => {
+          this.imagePreview = reader.result
+        }
+        reader.readAsDataURL(this.imageFile)
+        this.uploadImage = new FormData()
+        this.uploadImage.append('image', this.imageFile)
+      }
+    },
     togglePopup() {
+      console.log(this.birthday)
+      this.bio = this.biography
+      this.username = this.userName
       this.popupActive = true;
+      this.$nextTick(() => {
+        this.$refs.popup.focus();
+      });
     },
     closePopup() {
       this.popupActive = false;
     },
+    trapFocus(event) {
+      const popup = this.$refs.popup;
+      const focusableElements = popup.querySelectorAll('button');
+      const firstFocusable = focusableElements[0];
+      const lastFocusable = focusableElements[focusableElements.length - 1];
+
+      if (!event.shiftKey && document.activeElement === lastFocusable) {
+        event.preventDefault();
+        firstFocusable.focus();
+      } else if (event.shiftKey && document.activeElement === firstFocusable) {
+        event.preventDefault();
+        lastFocusable.focus();
+      }
+    },
   },
 };
 </script>
+
 <style scoped>
+.edit-menu {
+  margin: 1rem auto;
+}
+
 .popup {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -43,6 +154,11 @@ export default {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
   padding: 20px;
   z-index: 10;
+  outline: none;
+}
+
+.button {
+  margin: 1rem;
 }
 
 .popup-content {
