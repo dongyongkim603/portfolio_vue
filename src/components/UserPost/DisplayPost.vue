@@ -10,19 +10,20 @@
     </div>
     <div class="content user-details">
       <div>
-        <b>Date Posted: </b>{{postDate}}
+        <b>Date Posted: </b>{{ humanReadableDate(postDate) }}
       </div>
       <div v-if="username">
-        <b>Username: </b>{{username}}
+        <b>Username: </b>{{ username }}
       </div>
       <div v-if="description">
-        <b>Description: </b>{{description}}
+        <b>Description: </b>{{ description }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { formatISODateToReadableDate } from '../../helpers/dateTime.js'
 export default {
   name: 'MyAccount',
   props: {
@@ -31,7 +32,12 @@ export default {
     username: String,
     description: String,
     imageUrl: String,
-    postDate: Date
+    postDate: [Date, String]
+  },
+  methods: {
+    humanReadableDate(date) {
+      return formatISODateToReadableDate(date)
+    }
   }
 };
 </script>

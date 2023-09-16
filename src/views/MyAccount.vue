@@ -27,10 +27,10 @@
             <b>Bio: </b>{{bio}}
           </div>
           <div>
-            <b>Date joined:</b> <time :datetime="dateJoined">{{ dateJoined }}</time>
+            <b>Date joined:</b> <time :datetime="dateJoined">{{ humanReadableDate(dateJoined) }}</time>
           </div>
           <div>
-            <b>Birthday:</b> <time :datetime="dateJoined">{{ birthday }}</time>
+            <b>Birthday:</b> <time :datetime="dateJoined">{{ humanReadableDate(birthday) }}</time>
           </div>
         </div>
       </div>
@@ -73,6 +73,7 @@ import {
 import PopupMenu from '../components/PopupMenu/index.vue'
 import CreatePost from '../components/UserPost/CreatePost.vue'
 import DisplayPost from '../components/UserPost/DisplayPost.vue'
+import { formatISODateToReadableDate } from '../helpers/dateTime.js'
 
 export default {
   name: 'MyAccount',
@@ -104,7 +105,6 @@ export default {
   async created() {
     const userDetails = await this.fetchUserDetails()
     this.userPosts = await this.fetchUserPosts()
-    console.log(this.userPosts)
     this.user_id = userDetails?.get_user_id || null
     const sanityUser = 
     await fetchSanity(`*[_type == "profile" && uid == ${this.user_id}]{
@@ -123,6 +123,9 @@ export default {
     this.bio = userDetails?.bio || ''
   },
   methods: {
+    humanReadableDate(date) {
+      return formatISODateToReadableDate(date)
+    },
     async fetchUserDetails() {
       return await apiCall(
         'get',
@@ -161,7 +164,6 @@ button {
 
 .title {
   font-size: 1.5rem;
-  margin: 1.25rem auto;
 }
 
 .content {

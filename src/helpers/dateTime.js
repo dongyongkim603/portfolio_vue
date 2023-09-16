@@ -40,3 +40,12 @@ export function timeSince(date) {
       return `${years} ${years === 1 ? 'year' : 'years'} ago`;
   }
 }
+
+export function formatISODateToReadableDate(isoDate) {
+    if(typeof isoDate === 'string' && !isoDate.includes('T')) {
+        isoDate += 'T12:00:00.000Z'
+    }
+    const date = new Date(isoDate);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString(undefined, options);
+}
