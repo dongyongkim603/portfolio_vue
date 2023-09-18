@@ -13,18 +13,17 @@
         v-if="imageData.length > 0"
         :images="imageData"
       />
-      <div v-if="sellingPoints" class="columns">
+      <div class="selling-point title">
+        <h3 class="subtitle is-3">Projects</h3>
+      </div>
+      <div v-if="sellingPoints" class="columns usp">
         <SellingPoint
           v-for="sellingPoint in sellingPoints"
           :key="sellingPoint.id"
           :sellingPoint="sellingPoint"
+          class="selling-point"
         />
       </div>
-      <!-- <Carousel
-        v-if="carouselData"
-        :imagesUrls="carouselUrls"
-        :headline="''"
-      /> -->
     </section>
   </div>
 </template>
@@ -109,9 +108,33 @@ export default {
 
 <style lang="scss" scoped>
 .section {
-&.title {
+  &.title {
     background: #ffe5f0;
     margin-bottom: 0;
   }
+}
+
+.columns {
+  &.usp {
+    display: flex;
+  }
+}
+
+.selling-point {
+  background: #ffe5f0;
+  border-radius: 3rem;
+  margin: 1rem;
+  flex: 1 1 0px;
+  box-shadow: 5px 5px 5px ;
+
+  &.title {
+    width: 20%;
+    height: 4rem;
+    display: flex;
+  }
+}
+
+.subtitle {
+  margin: auto;
 }
 </style>
