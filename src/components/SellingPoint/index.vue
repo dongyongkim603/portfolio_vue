@@ -7,7 +7,7 @@
       </div>
       <div class="column">
         <p class="subtitle">{{ sellingPoint.content }}</p>
-        <a :href="sellingPoint.button_link" class="button is-primary">{{ sellingPoint.button }}</a>
+        <a :href="sellingPoint.button_link" class="button is-info">{{ sellingPoint.button }}</a>
       </div>
     </div>
   </div>
@@ -25,7 +25,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .column
 .selling-point {
   padding: 20px;

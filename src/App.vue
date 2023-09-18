@@ -1,9 +1,9 @@
 <template>
   <div id="wrapper">
     <NavigationBar />
-    <section class="section">
+    <!-- <section class="section"> -->
       <router-view/>
-    </section>
+    <!-- </section> -->
     <Footer/>
   </div>
 </template>
@@ -31,4 +31,8 @@ export default {
 </script>
 <style lang="scss">
 @import '../node_modules/bulma';
+#wrapper {
+  background: #a9bdff;
+  // background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(25,146,187,1) 35%, rgba(0,212,255,1) 100%); 
+}
 </style>
