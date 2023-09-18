@@ -9,10 +9,6 @@
       :carouselUrls="carouselUrls"
     />
     <section class="section">
-      <ImageGalary
-        v-if="imageData.length > 0"
-        :images="imageData"
-      />
       <div class="selling-point title">
         <h3 class="subtitle is-3">Projects</h3>
       </div>
@@ -25,6 +21,18 @@
         />
       </div>
     </section>
+    <section class="section">
+      <div class="selling-point title">
+        <h3 class="subtitle is-3">Resume</h3>
+      </div>
+      <div class="columns usp">
+        resume
+      </div>
+    </section>
+    <ImageGalary
+      v-if="imageData.length > 0"
+      :images="imageData"
+    />
   </div>
 </template>
 
@@ -112,6 +120,11 @@ export default {
     background: #ffe5f0;
     margin-bottom: 0;
   }
+}
+
+.title{
+  color: #193db1;
+  font-size: 3rem;
 }
 
 .columns {

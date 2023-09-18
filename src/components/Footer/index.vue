@@ -28,5 +28,6 @@
 <style scoped lang="scss">
 .footer {
   background: #a9bdff;
+  box-shadow: 3px 3px 3px 3px;
 }
 </style>

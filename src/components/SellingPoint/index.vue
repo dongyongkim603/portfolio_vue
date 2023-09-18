@@ -12,8 +12,8 @@
       </div>
       <div class="column">
         <p class="subtitle">{{ sellingPoint.content }}</p>
-        <a :href="sellingPoint.button_link" class="button is-info">{{ sellingPoint.button }}</a>
       </div>
+      <a :href="sellingPoint.button_link" class="button is-info">{{ sellingPoint.button }}</a>
     </div>
   </div>
 </template>
@@ -35,10 +35,13 @@ export default {
 .selling-point {
   padding: 10px;
   border-radius: 5px;
+  margin-top: auto;
+  margin-right: auto;
+  margin-left: auto;
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
-  width: fit-content;
+  width: 90%;
 }
 
 .image {

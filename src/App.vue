@@ -32,7 +32,7 @@ export default {
 <style lang="scss">
 @import '../node_modules/bulma';
 #wrapper {
-  background: #a9bdff;
-  // background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(25,146,187,1) 35%, rgba(0,212,255,1) 100%); 
+  background: rgb(255,255,255);
+  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(169,189,255,1) 100%);
 }
 </style>
