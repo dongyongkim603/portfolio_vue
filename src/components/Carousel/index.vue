@@ -1,14 +1,12 @@
 <template>
-  <div class="carousel">
-    <div class="carousel-inner">
-      <div 
-        class="carousel-item"
-        v-for="(imageUrl, index) in imagesUrls"
-        :key="index"
-        :style="{ 'display': index === currentIndex ? 'flex' : 'none' }"
-      >
-        <img :src="imageUrl" alt="Carousel Image">
-      </div>
+  <div class="carousel-inner">
+    <div 
+      class="carousel-item"
+      v-for="(imageUrl, index) in imagesUrls"
+      :key="index"
+      :style="{ 'display': index === currentIndex ? 'flex' : 'none' }"
+    >
+      <img :src="imageUrl" alt="Carousel Image">
     </div>
   </div>
 </template>
@@ -43,29 +41,21 @@ export default {
 
 <style scoped>
 img {
-  margin: auto;
+  margin: 0 0 0 1rem;
   overflow: hidden;
   max-height: 100%;
   max-width: 100%;
-}
-
-.carousel {
-  width: 35rem;
-  margin: auto;
-  background-color: #f0f0f0;
-  padding: 2rem;
-  box-shadow: 5px 5px 5px;
+  border-radius: 3rem;
+  box-shadow: 5px 5px 5px #ffb5d6;
 }
 
 .carousel-inner {
-  width: 30rem;
-  height: 25rem;
   margin: auto;
 }
 
 .carousel-item {
-  width: 30rem;
-  height: 25rem;
+  max-width: 25rem;
+  max-height: 20rem;
   margin: auto;
 }
 </style>

@@ -1,21 +1,28 @@
 <template>
-  <div class="about">
-    <h1 class="title" v-if="headline">{{headline}}</h1>
+  <div>
+    <section class="section title">
+      <h1 class="title" v-if="headline">{{headline}}</h1>
+    </section>
     <Banner 
       v-if="banner"
       :imageUrl="banner"
     />
-    <ImageGalary
-      v-if="imageData.length > 0"
-      :images="imageData"
-    />
-    <div v-if="sellingPoints" class="columns">
-      <SellingPoint
-        v-for="sellingPoint in sellingPoints"
-        :key="sellingPoint.id"
-        :sellingPoint="sellingPoint"
-      />
-    </div>
+    <section class="section">
+      <div class="about">
+        <ImageGalary
+          v-if="imageData.length > 0"
+          :images="imageData"
+        />
+        <div v-if="sellingPoints" class="columns">
+          <SellingPoint
+            v-for="sellingPoint in sellingPoints"
+            :key="sellingPoint.id"
+            :sellingPoint="sellingPoint"
+            class="selling-point"
+          />
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -75,6 +82,18 @@ export default {
   },
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
+.section {
+  &.title {
+    background: #ffe5f0;
+    margin-bottom: 0;
+  }
+}
 
+.selling-point {
+  background: #ffe5f0;
+  border-radius: 3rem;
+  margin: 1rem;
+  box-shadow: 5px 5px 5px ;
+}
 </style>

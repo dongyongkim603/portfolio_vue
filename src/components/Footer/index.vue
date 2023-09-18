@@ -25,3 +25,8 @@
     </div>
   </footer>
 </template>
+<style scoped lang="scss">
+.footer {
+  background: #a9bdff;
+}
+</style>
