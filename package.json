@@ -13,8 +13,10 @@
     "bulma": "^0.9.4",
     "bulma-toast": "^2.4.3",
     "core-js": "^3.8.3",
+    "googleapis": "^126.0.1",
     "vue": "^3.3.4",
     "vue-bulma": "^0.0.35",
+    "vue-google-api": "^0.2.0",
     "vue-router": "^4.0.3",
     "vuex": "^4.0.0"
   },

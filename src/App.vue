@@ -10,6 +10,7 @@
 <script>
 import NavigationBar from './components/NavigationBar'
 import Footer from './components/Footer'
+import googleDrive from './services/googleDrive'
 
 export default {
   components: {
@@ -24,8 +25,6 @@ export default {
   beforeCreate() {
     document.title = 'John | Home'
     this.$store.commit('initializeStore')
-    
-    // const token = this.$store.state.token
   },
 }
 </script>
