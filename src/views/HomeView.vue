@@ -47,8 +47,6 @@ import Banner from '../components/Banner/index.vue'
 import ImageGalary from '../components/ImageGallary/index.vue'
 import SellingPoint from '../components/SellingPoint/index.vue'
 
-import JSZip from 'jszip';
-
 import { fetchSanity } from '../helpers/sanity'
 import apiCall from '../helpers/apiCall'
 
