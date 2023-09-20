@@ -21,12 +21,17 @@
         />
       </div>
     </section>
-    <section class="section">
+    <section v-if="resumeHtml" class="section">
       <div class="selling-point title">
         <h3 class="subtitle is-3">Resume</h3>
       </div>
-      <div v-if="resume" class="columns resume">
-        <div v-html="resume"></div>
+      <div>
+        <button class="button is-info" @click="downloadResume">
+          Download Resume
+        </button>
+      </div>
+      <div class="columns resume">
+        <div v-html="resumeHtml"></div>
       </div>
     </section>
     <ImageGalary
@@ -41,6 +46,8 @@ import Carousel from '../components/Carousel/index.vue'
 import Banner from '../components/Banner/index.vue'
 import ImageGalary from '../components/ImageGallary/index.vue'
 import SellingPoint from '../components/SellingPoint/index.vue'
+
+import JSZip from 'jszip';
 
 import { fetchSanity } from '../helpers/sanity'
 import apiCall from '../helpers/apiCall'
@@ -60,7 +67,9 @@ export default {
       imageData: [],
       headline: '',
       banner: '',
-      resume: '', 
+      resumeHtml: '',
+      resumeUrl: '',
+      resumeFile: null
     }
   },
   async beforeCreate() {
@@ -107,16 +116,42 @@ export default {
     this.headline = pageData[0]?.headline
     this.sellingPoints = pageData[0]?.components
     this.carouselData = pageData[0]?.page_carousel
-    this.resume = await apiCall(
+    await apiCall(
       'get',
       'homepage-detail/',
       this.$store.state.token
     ).then(response => {
-      return response?.data[0]?.get_resume
+      console.log(response)
+      this.resumeHtml = response?.data[0]?.get_resume_html
+      this.resumeUrl = response?.data[0]?.get_resume_url
     }).catch(err => {
       console.error(err.message)
       return ''
     })
+  },
+  methods: {
+    async downloadResume() {
+      const resumeBlob = await apiCall('get-file',
+        'download-resume/',
+        this.$store.state.token)
+        .then(async response => {
+          const blob = new Blob([response?.data], { type: 'application/octet-stream' });
+
+          const url = window.URL.createObjectURL(blob);
+
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.download = 'resume.docx';
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          return response?.data[0]?.get_resume_file
+      }).catch(err => {
+        console.error(err.message)
+        return ''
+      })
+    },
   },
   computed: {
     carouselUrls() {
