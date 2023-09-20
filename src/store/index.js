@@ -7,7 +7,7 @@ export default createStore({
     isLoading: false,
     username: '',
     isSuper: false,
-    age: null,
+    birthday: null,
     dateJoined: null,
     profileImageUrl: '',
     thumbnailUrl: '',
@@ -22,6 +22,7 @@ export default createStore({
         state.username = localStorage.getItem('username')
         state.isSuper = localStorage.getItem('isSuper')
         state.uid = localStorage.getItem('uid')
+        state.birthday = localStorage.getItem('birthday')
         state.isAuthenticated = true
       } else {
         state.token = ''
@@ -29,6 +30,7 @@ export default createStore({
         state.isAuthenticated = false
         state.isSuper = false
         state.uid = null
+        state.birthday = null
       }
     },
     setIsLoading(state, status) {
@@ -51,7 +53,7 @@ export default createStore({
     setUserDetails(state, userDetails) {
       state.uid = userDetails.uid
       state.isSuper = true
-      state.age = userDetails.age
+      state.birthday = userDetails.birthday
       state.dateJoined = userDetails.get_date_joined,
       state.profileImageUrl = userDetails.get_profile_image
       state.thumbnailUrl = userDetails.get_thumbnail
@@ -59,7 +61,7 @@ export default createStore({
     },
     removeUserDetails(state, userDetails) {
       state.isSuper = false
-      state.age = null
+      state.birthday = null
       state.dateJoined = null,
       state.profileImageUrl = ''
       state.thumbnailUrl = ''

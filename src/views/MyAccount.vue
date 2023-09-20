@@ -34,6 +34,7 @@
           </div>
         </div>
       </div>
+      <div v-html="resume"></div>
       <div class="field">
         <div class="control">
           <PopupMenu
@@ -96,7 +97,8 @@ export default {
       bio: '',
       dateJoined: '',
       sanityProfileId: null,
-      userPosts: []
+      userPosts: [],
+      resume: null
     };
   },
   beforeCreate() {
@@ -121,6 +123,7 @@ export default {
     this.thumbnailUrl = userDetails?.get_thumbnail || ''
     this.dateJoined = userDetails?.get_date_joined || ''
     this.bio = userDetails?.bio || ''
+    this.resume = userDetails.get_resume || ''
   },
   methods: {
     humanReadableDate(date) {
