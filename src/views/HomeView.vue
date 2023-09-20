@@ -25,8 +25,8 @@
       <div class="selling-point title">
         <h3 class="subtitle is-3">Resume</h3>
       </div>
-      <div class="columns usp">
-        resume
+      <div v-if="resume" class="columns resume">
+        <div v-html="resume"></div>
       </div>
     </section>
     <ImageGalary
@@ -43,6 +43,7 @@ import ImageGalary from '../components/ImageGallary/index.vue'
 import SellingPoint from '../components/SellingPoint/index.vue'
 
 import { fetchSanity } from '../helpers/sanity'
+import apiCall from '../helpers/apiCall'
 
 export default {
   name: 'HomeView',
@@ -59,6 +60,7 @@ export default {
       imageData: [],
       headline: '',
       banner: '',
+      resume: '', 
     }
   },
   async beforeCreate() {
@@ -105,6 +107,16 @@ export default {
     this.headline = pageData[0]?.headline
     this.sellingPoints = pageData[0]?.components
     this.carouselData = pageData[0]?.page_carousel
+    this.resume = await apiCall(
+      'get',
+      'homepage-detail/',
+      this.$store.state.token
+    ).then(response => {
+      return response?.data[0]?.get_resume
+    }).catch(err => {
+      console.error(err.message)
+      return ''
+    })
   },
   computed: {
     carouselUrls() {
@@ -130,6 +142,12 @@ export default {
 .columns {
   &.usp {
     display: flex;
+  }
+
+  &.resume {
+    margin: 2rem 5rem 5rem 5rem;
+    background-color: white;
+    padding: 5rem;
   }
 }
 
