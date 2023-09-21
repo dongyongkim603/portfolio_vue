@@ -26,13 +26,15 @@
       class="section"
       v-motion-fade-visible
     >
-      <div class="selling-point title">
-        <h3 class="subtitle is-3">Resume</h3>
-      </div>
-      <div>
-        <button class="button is-info" @click="downloadResume">
-          Download Resume
-        </button>
+      <div class="resume-ctas">
+        <div class="selling-point title">
+          <h3 class="subtitle is-3">Resume</h3>
+        </div>
+        <div class="button-container">
+          <button class="button is-info" @click="downloadResume">
+            Download Resume
+          </button>
+        </div>
       </div>
       <div v-motion-fade-visible class="columns">
         <div 
@@ -212,17 +214,20 @@ export default {
   padding: 5rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .resume-animation {
-    animation: wipe-enter 1s 1;
-  }
+.resume-ctas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+}
+
+.button-container {
+  width: 20%;
 }
 
 .selling-point {
   background: #ffe5f0;
   border-radius: 3rem;
   margin: 1rem;
-  flex: 1 1 0px;
   box-shadow: 5px 5px 5px ;
 
   &.title {
