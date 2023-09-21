@@ -26,29 +26,12 @@
 </template>
 
 <script>
-import apiCall from '../helpers/apiCall'
+import apiCall from '../../helpers/apiCall'
 
 export default {
-  data() {
-    return {
-      resumeHtml: '',
-      resumeUrl: '',
-      resumeFile: null,
-      isResumeVisible: false,
-    }
-  },
-  async beforeCreate() {
-    await apiCall(
-      'get',
-      'homepage-detail/',
-      this.$store.state.token
-    ).then(response => {
-      this.resumeHtml = response?.data[0]?.get_resume_html
-      this.resumeUrl = response?.data[0]?.get_resume_url
-    }).catch(err => {
-      console.error(err.message)
-      return ''
-    })
+  props: {
+    resumeHtml: String,
+    resumeUrl: String,
   },
   methods: {
     async downloadResume() {

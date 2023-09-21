@@ -21,30 +21,10 @@
         />
       </div>
     </section>
-    <section 
-      v-if="resumeHtml"
-      class="section"
-      v-motion-fade-visible
-    >
-      <div class="resume-ctas">
-        <div class="selling-point title">
-          <h3 class="subtitle is-3">Resume</h3>
-        </div>
-        <div class="button-container">
-          <button class="button is-info" @click="downloadResume">
-            Download Resume
-          </button>
-        </div>
-      </div>
-      <div v-motion-fade-visible class="columns">
-        <div 
-          :ref="'resume'"
-          class="resume"
-        >
-          <div v-motion-fade-visible v-html="resumeHtml"></div>
-        </div>
-      </div>
-    </section>
+    <Resume
+      :resumeUrl="resumeUrl"
+      :resumeHtml="resumeHtml"
+    />
     <ImageGalary
       v-if="imageData.length > 0"
       :images="imageData"
@@ -57,6 +37,7 @@ import Carousel from '../components/Carousel/index.vue'
 import Banner from '../components/Banner/index.vue'
 import ImageGalary from '../components/ImageGallary/index.vue'
 import SellingPoint from '../components/SellingPoint/index.vue'
+import Resume from '../components/Resume/index.vue'
 
 import { fetchSanity } from '../helpers/sanity'
 import apiCall from '../helpers/apiCall'
@@ -67,7 +48,8 @@ export default {
     Carousel,
     Banner,
     ImageGalary,
-    SellingPoint
+    SellingPoint,
+    Resume
   },
   data() {
     return {
@@ -78,13 +60,7 @@ export default {
       banner: '',
       resumeHtml: '',
       resumeUrl: '',
-      resumeFile: null,
-      isResumeVisible: false,
     }
-  },
-  mounted() {
-    window.addEventListener('scroll', this.checkResumeVisibility)
-    this.checkResumeVisibility()
   },
   async beforeCreate() {
     document.title = 'John | About'
@@ -143,21 +119,6 @@ export default {
     })
   },
   methods: {
-    checkResumeVisibility() {
-      const element = this.$refs.resume;
-      if (element) {
-        const rect = element.getBoundingClientRect();
-        const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-        console.log(this.isResumeVisible)
-        console.log(rect.top, 0)
-        console.log( rect.bottom, windowHeight)
-        if (rect.top >= 0 && rect.bottom <= windowHeight) {
-          this.isResumeVisible = true;
-        } else {
-          this.isResumeVisible = false;
-        }
-      }
-    },
     async downloadResume() {
       await apiCall('get-file',
         'download-resume/',
@@ -206,22 +167,6 @@ export default {
   &.usp {
     display: flex;
   }
-}
-
-.resume {
-  margin: 2rem 5rem 5rem 5rem;
-  background-color: white;
-  padding: 5rem;
-}
-
-.resume-ctas {
-  display: flex;
-  justify-content: space-between;
-  align-items: center; 
-}
-
-.button-container {
-  width: 20%;
 }
 
 .selling-point {
