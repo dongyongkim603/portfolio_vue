@@ -21,7 +21,11 @@
         />
       </div>
     </section>
-    <section v-if="resumeHtml" class="section">
+    <section 
+      v-if="resumeHtml"
+      class="section"
+      v-motion-fade-visible
+    >
       <div class="selling-point title">
         <h3 class="subtitle is-3">Resume</h3>
       </div>
@@ -30,8 +34,13 @@
           Download Resume
         </button>
       </div>
-      <div class="columns resume">
-        <div v-html="resumeHtml"></div>
+      <div v-motion-fade-visible class="columns">
+        <div 
+          :ref="'resume'"
+          class="resume"
+        >
+          <div v-motion-fade-visible v-html="resumeHtml"></div>
+        </div>
       </div>
     </section>
     <ImageGalary
@@ -67,8 +76,13 @@ export default {
       banner: '',
       resumeHtml: '',
       resumeUrl: '',
-      resumeFile: null
+      resumeFile: null,
+      isResumeVisible: false,
     }
+  },
+  mounted() {
+    window.addEventListener('scroll', this.checkResumeVisibility)
+    this.checkResumeVisibility()
   },
   async beforeCreate() {
     document.title = 'John | About'
@@ -119,7 +133,6 @@ export default {
       'homepage-detail/',
       this.$store.state.token
     ).then(response => {
-      console.log(response)
       this.resumeHtml = response?.data[0]?.get_resume_html
       this.resumeUrl = response?.data[0]?.get_resume_url
     }).catch(err => {
@@ -128,8 +141,23 @@ export default {
     })
   },
   methods: {
+    checkResumeVisibility() {
+      const element = this.$refs.resume;
+      if (element) {
+        const rect = element.getBoundingClientRect();
+        const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+        console.log(this.isResumeVisible)
+        console.log(rect.top, 0)
+        console.log( rect.bottom, windowHeight)
+        if (rect.top >= 0 && rect.bottom <= windowHeight) {
+          this.isResumeVisible = true;
+        } else {
+          this.isResumeVisible = false;
+        }
+      }
+    },
     async downloadResume() {
-      const resumeBlob = await apiCall('get-file',
+      await apiCall('get-file',
         'download-resume/',
         this.$store.state.token)
         .then(async response => {
@@ -176,11 +204,17 @@ export default {
   &.usp {
     display: flex;
   }
+}
 
-  &.resume {
-    margin: 2rem 5rem 5rem 5rem;
-    background-color: white;
-    padding: 5rem;
+.resume {
+  margin: 2rem 5rem 5rem 5rem;
+  background-color: white;
+  padding: 5rem;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .resume-animation {
+    animation: wipe-enter 1s 1;
   }
 }
 
