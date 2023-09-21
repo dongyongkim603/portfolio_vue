@@ -1,14 +1,15 @@
 <template>
   <div class="home">
-    <section class="section title">
+    <section v-motion-fade-visible class="section title">
       <h1 class="title" v-if="headline">{{headline}}</h1>
     </section>
     <Banner 
+      v-motion-fade-visible
       v-if="banner"
       :imageUrl="banner"
       :carouselUrls="carouselUrls"
     />
-    <section class="section">
+    <section v-motion-fade-visible class="section">
       <div class="selling-point title">
         <h3 class="subtitle is-3">Projects</h3>
       </div>
@@ -26,6 +27,7 @@
       :resumeHtml="resumeHtml"
     />
     <ImageGalary
+      v-motion-fade-visible
       v-if="imageData.length > 0"
       :images="imageData"
     />

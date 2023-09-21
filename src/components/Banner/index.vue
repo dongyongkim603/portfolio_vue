@@ -36,7 +36,7 @@ export default {
 
 <style scoped>
 .banner {
-  height: 300px;
+  height: 30rem;
   width: 90%;
   margin: 2rem;
   background-size: cover;

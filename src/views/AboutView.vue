@@ -1,9 +1,10 @@
 <template>
   <div>
-    <section class="section title">
+    <section v-motion-fade-visible class="section title">
       <h1 class="title" v-if="headline">{{headline}}</h1>
     </section>
     <Banner 
+      v-motion-fade-visible
       v-if="banner"
       :imageUrl="banner"
     />
@@ -12,8 +13,9 @@
         <ImageGalary
           v-if="imageData.length > 0"
           :images="imageData"
+          v-motion-fade-visible
         />
-        <div v-if="sellingPoints" class="columns">
+        <div v-motion-fade-visible v-if="sellingPoints" class="columns">
           <SellingPoint
             v-for="sellingPoint in sellingPoints"
             :key="sellingPoint.id"
