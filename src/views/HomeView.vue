@@ -21,14 +21,10 @@
         />
       </div>
     </section>
-    <section class="section">
-      <div class="selling-point title">
-        <h3 class="subtitle is-3">Resume</h3>
-      </div>
-      <div v-if="resume" class="columns resume">
-        <div v-html="resume"></div>
-      </div>
-    </section>
+    <Resume
+      :resumeUrl="resumeUrl"
+      :resumeHtml="resumeHtml"
+    />
     <ImageGalary
       v-if="imageData.length > 0"
       :images="imageData"
@@ -41,6 +37,7 @@ import Carousel from '../components/Carousel/index.vue'
 import Banner from '../components/Banner/index.vue'
 import ImageGalary from '../components/ImageGallary/index.vue'
 import SellingPoint from '../components/SellingPoint/index.vue'
+import Resume from '../components/Resume/index.vue'
 
 import { fetchSanity } from '../helpers/sanity'
 import apiCall from '../helpers/apiCall'
@@ -51,7 +48,8 @@ export default {
     Carousel,
     Banner,
     ImageGalary,
-    SellingPoint
+    SellingPoint,
+    Resume
   },
   data() {
     return {
@@ -60,7 +58,8 @@ export default {
       imageData: [],
       headline: '',
       banner: '',
-      resume: '', 
+      resumeHtml: '',
+      resumeUrl: '',
     }
   },
   async beforeCreate() {
@@ -107,16 +106,41 @@ export default {
     this.headline = pageData[0]?.headline
     this.sellingPoints = pageData[0]?.components
     this.carouselData = pageData[0]?.page_carousel
-    this.resume = await apiCall(
+    await apiCall(
       'get',
       'homepage-detail/',
       this.$store.state.token
     ).then(response => {
-      return response?.data[0]?.get_resume
+      this.resumeHtml = response?.data[0]?.get_resume_html
+      this.resumeUrl = response?.data[0]?.get_resume_url
     }).catch(err => {
       console.error(err.message)
       return ''
     })
+  },
+  methods: {
+    async downloadResume() {
+      await apiCall('get-file',
+        'download-resume/',
+        this.$store.state.token)
+        .then(async response => {
+          const blob = new Blob([response?.data], { type: 'application/octet-stream' });
+
+          const url = window.URL.createObjectURL(blob);
+
+          const a = document.createElement('a');
+          a.style.display = 'none';
+          a.href = url;
+          a.download = 'resume.docx';
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          return response?.data[0]?.get_resume_file
+      }).catch(err => {
+        console.error(err.message)
+        return ''
+      })
+    },
   },
   computed: {
     carouselUrls() {
@@ -143,19 +167,12 @@ export default {
   &.usp {
     display: flex;
   }
-
-  &.resume {
-    margin: 2rem 5rem 5rem 5rem;
-    background-color: white;
-    padding: 5rem;
-  }
 }
 
 .selling-point {
   background: #ffe5f0;
   border-radius: 3rem;
   margin: 1rem;
-  flex: 1 1 0px;
   box-shadow: 5px 5px 5px ;
 
   &.title {

@@ -14,9 +14,6 @@ export default async function apiCall(method, path, token, body, headers) {
   switch(method.toLowerCase()) {
     case "post":
       res = axios.post(path, body, headers)
-        .then(response => {
-          return response
-        })
         .catch(err => {
           console.error(err.message)
           return { message: err.message }
@@ -24,9 +21,6 @@ export default async function apiCall(method, path, token, body, headers) {
       break
     case "patch":
       res = axios.patch(path, body, headers)
-        .then(response => {
-          return response
-        })
         .catch(err => {
           console.error(err.message)
           return { message: err.message }
@@ -34,13 +28,18 @@ export default async function apiCall(method, path, token, body, headers) {
       break
     case "get":
       res = await axios.get(path)
-        .then(response => {
-          return response
-        })
         .catch(err => {
           console.error(err.message)
           return { message: err.message }
         })
+      break
+    case "get-file":
+      res = await axios.get(path, { responseType: 'blob' })
+        .catch(err => {
+          console.error(err.message)
+          return { message: err.message }
+        })
+      break
     case "delete":
       break
     default:
