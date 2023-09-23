@@ -1,7 +1,7 @@
 <template>
   <div class="page-forum">
     <div class="columns is-multiline">
-      <div class="column is-9">}
+      <div class="column is-9">
         <figure class="image mb-6">
           <img v-bind:src="forum.get_image">
         </figure>
@@ -52,6 +52,7 @@ export default {
     async fetchForumData() {
       const category_slug = this.$route.params.category_slug
       const forum_slug = this.$route.params.forum_slug
+      debugger
       this.forum = await apiCall(
         'get',
         `forums/${category_slug}/${forum_slug}/`,
