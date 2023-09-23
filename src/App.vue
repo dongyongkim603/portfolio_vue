@@ -29,8 +29,8 @@ export default {
   },
 }
 </script>
-<style lang="scss">
-@import '../node_modules/bulma';
+<style lang="scss" >
+@import "@/assets/global.scss";
 #wrapper {
   background: rgb(255,255,255);
   background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(169,189,255,1) 100%);
