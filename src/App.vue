@@ -1,9 +1,7 @@
 <template>
   <div id="wrapper">
     <NavigationBar />
-    <!-- <section class="section"> -->
       <router-view/>
-    <!-- </section> -->
     <Footer/>
   </div>
 </template>

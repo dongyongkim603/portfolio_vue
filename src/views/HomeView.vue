@@ -9,6 +9,9 @@
       :imageUrl="banner"
       :carouselUrls="carouselUrls"
     />
+
+    <button class="button is-info" @click="getToken" />
+
     <section v-motion-fade-visible class="section">
       <div class="selling-point title">
         <h3 class="subtitle is-3">Projects</h3>
@@ -43,6 +46,7 @@ import Resume from '../components/Resume/index.vue'
 
 import { fetchSanity } from '../helpers/sanity'
 import apiCall from '../helpers/apiCall'
+import { getBearerToken } from '../helpers/spotify'
 
 export default {
   name: 'HomeView',
@@ -121,6 +125,9 @@ export default {
     })
   },
   methods: {
+    async getToken() {
+      await getBearerToken()
+    },
     async downloadResume() {
       await apiCall('get-file',
         'download-resume/',
