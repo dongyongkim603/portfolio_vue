@@ -5,6 +5,7 @@ import SignUp from '../views/SignUp.vue'
 import Login from '../views/Login.vue'
 import MyAccount from '../views/MyAccount.vue'
 import store from '@/store'
+import SpotifyLogin from '../views/Spotify/Login.vue'
 
 const routes = [
   {
@@ -29,6 +30,15 @@ const routes = [
     meta: {
       requireLogin: true
     }
+  },
+  {
+    path: '/spotify/callback',
+    name: 'spotify-callback',
+    component: SpotifyLogin, // Replace with your component
+    props: route => ({
+      code: route.query.code,
+      state: route.query.state
+    })
   },
   {
     path: '/about',

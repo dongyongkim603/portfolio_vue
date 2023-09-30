@@ -43,6 +43,5 @@ export default async function expressApi(method, path, body) {
     default:
       res = null
   }
-  console.log(res)
   return res
 }
