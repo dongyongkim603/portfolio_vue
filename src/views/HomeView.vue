@@ -10,7 +10,7 @@
       :carouselUrls="carouselUrls"
     />
 
-    <button class="button is-info" @click="getToken" />
+    <button label="test" class="button is-info" @click="getToken"> test </button>
 
     <section v-motion-fade-visible class="section">
       <div class="selling-point title">
@@ -46,7 +46,7 @@ import Resume from '../components/Resume/index.vue'
 
 import { fetchSanity } from '../helpers/sanity'
 import apiCall from '../helpers/apiCall'
-import { getBearerToken } from '../helpers/spotify'
+import expressApi from '../helpers/expressApi'
 
 export default {
   name: 'HomeView',
@@ -126,7 +126,11 @@ export default {
   },
   methods: {
     async getToken() {
-      await getBearerToken()
+      const token = await expressApi('get', 'login', {
+        clientId: process.env.VUE_APP_SPOTIFY_CLIENT_SECRET,
+        clientSecret: process.env.VUE_APP_SPOTIFY_CLIENT_ID,
+      })
+      console.log(token)
     },
     async downloadResume() {
       await apiCall('get-file',

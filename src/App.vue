@@ -22,8 +22,6 @@ export default {
   beforeCreate() {
     document.title = 'John | Home'
     this.$store.commit('initializeStore')
-    
-    // const token = this.$store.state.token
   },
 }
 </script>
