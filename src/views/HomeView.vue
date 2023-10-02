@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <div v-if="pageHtml" v-html="pageHtml"></div>
     <section v-motion-fade-visible class="section title">
       <h1 class="title" v-if="headline">{{headline}}</h1>
     </section>
@@ -10,7 +11,7 @@
       :carouselUrls="carouselUrls"
     />
 
-    <button label="test" class="button is-info" @click="getToken"> test </button>
+    <button label="test" class="button is-info" @click="redirectToSpotify"> test </button>
 
     <section v-motion-fade-visible class="section">
       <div class="selling-point title">
@@ -66,6 +67,7 @@ export default {
       banner: '',
       resumeHtml: '',
       resumeUrl: '',
+      pageHtml: ''
     }
   },
   async beforeCreate() {
@@ -125,12 +127,26 @@ export default {
     })
   },
   methods: {
-    async getToken() {
-      const token = await expressApi('get', 'login', {
-        clientId: process.env.VUE_APP_SPOTIFY_CLIENT_SECRET,
-        clientSecret: process.env.VUE_APP_SPOTIFY_CLIENT_ID,
-      })
-      console.log(token)
+    generateRandomString(length) {
+      let text = '';
+      let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+      for (let i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      }
+      return text;
+    },
+    redirectToSpotify() {
+      const state = this.generateRandomString(16);
+      const queryParams = new URLSearchParams({
+        response_type: 'code',
+        client_id: process.env.VUE_APP_SPOTIFY_CLIENT_ID,
+        redirect_uri: 'http://localhost:8080/spotify/callback',
+        state: state,
+        scope: 'user-top-read',
+      });
+      const spotifyAuthUrl = `https://accounts.spotify.com/authorize?${queryParams.toString()}`;
+      window.location.href = spotifyAuthUrl;
     },
     async downloadResume() {
       await apiCall('get-file',
