@@ -1,7 +1,6 @@
 <template>
   <div>
-    Code: {{spotifyCode}}
-    State: {{spotifyState}}    
+
   </div>
 </template>
 <script>
@@ -26,26 +25,20 @@ export default {
       console.error(err.message)
       return
     })
-    console.log(auth?.data?.auth?.refresh_token) 
-    const refresh = 
     await expressApi(
       'post', 
       `refresh_token`,
-      { refresh_token: auth.data.auth.refresh_token }
+      { refresh_token: auth?.data?.auth?.refresh_token }
     )
     .catch(err => {
       console.error(err.message)
       return
     })
-    debugger
-
-    console.log("refresh token",refresh)
+    // const recentTracks = await expressApi('post', 'recent-tracks')
+    this.$router.push('/')
   },
   beforeCreate() {
     document.title = 'Spotify | John'
-  },
-  methods: {
-
   }
 }
 </script>
