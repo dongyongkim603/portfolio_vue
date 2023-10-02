@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <div v-if="pageHtml" v-html="pageHtml"></div>
     <section v-motion-fade-visible class="section title">
       <h1 class="title" v-if="headline">{{headline}}</h1>
     </section>
@@ -9,6 +10,9 @@
       :imageUrl="banner"
       :carouselUrls="carouselUrls"
     />
+
+    <button label="test" class="button is-info" @click="redirectToSpotify"> test </button>
+
     <section v-motion-fade-visible class="section">
       <div class="selling-point title">
         <h3 class="subtitle is-3">Projects</h3>
@@ -43,6 +47,7 @@ import Resume from '../components/Resume/index.vue'
 
 import { fetchSanity } from '../helpers/sanity'
 import apiCall from '../helpers/apiCall'
+import expressApi from '../helpers/expressApi'
 
 export default {
   name: 'HomeView',
@@ -62,6 +67,7 @@ export default {
       banner: '',
       resumeHtml: '',
       resumeUrl: '',
+      pageHtml: ''
     }
   },
   async beforeCreate() {
@@ -121,6 +127,27 @@ export default {
     })
   },
   methods: {
+    generateRandomString(length) {
+      let text = '';
+      let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+      for (let i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      }
+      return text;
+    },
+    redirectToSpotify() {
+      const state = this.generateRandomString(16);
+      const queryParams = new URLSearchParams({
+        response_type: 'code',
+        client_id: process.env.VUE_APP_SPOTIFY_CLIENT_ID,
+        redirect_uri: 'http://localhost:8080/spotify/callback',
+        state: state,
+        scope: 'user-top-read',
+      });
+      const spotifyAuthUrl = `https://accounts.spotify.com/authorize?${queryParams.toString()}`;
+      window.location.href = spotifyAuthUrl;
+    },
     async downloadResume() {
       await apiCall('get-file',
         'download-resume/',

@@ -1,9 +1,7 @@
 <template>
   <div id="wrapper">
     <NavigationBar />
-    <!-- <section class="section"> -->
       <router-view/>
-    <!-- </section> -->
     <Footer/>
   </div>
 </template>
@@ -24,8 +22,6 @@ export default {
   beforeCreate() {
     document.title = 'John | Home'
     this.$store.commit('initializeStore')
-    
-    // const token = this.$store.state.token
   },
 }
 </script>

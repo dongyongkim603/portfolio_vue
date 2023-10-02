@@ -1,40 +1,38 @@
 //add security
+const expressAxios = require('axios');
 
-const axios = require('axios');
+const headers = {
+  'Content-Type': 'application/json',
+};
 
-export default async function apiCall(method, path, token, body, headers) {
-  axios.defaults.baseURL = process.env.VUE_APP_DJANGO_URL
-  if(token) {
-    axios.defaults.headers.common['Authorization'] = "Token " + token
-  } else {
-    axios.defaults.headers.common['Authorization'] = ""
-  }
-
+export default async function expressApi(method, path, body) {
+  expressAxios.defaults.baseURL = process.env.VUE_APP_EXPRESS_URL
   let res = {}
+
   switch(method.toLowerCase()) {
     case "post":
-      res = axios.post(path, body, headers)
+      res = expressAxios.post(path, body, headers)
         .catch(err => {
           console.error(err.message)
           return { message: err.message }
         })
       break
     case "patch":
-      res = axios.patch(path, body, headers)
+      res = expressAxios.patch(path, body, headers)
         .catch(err => {
           console.error(err.message)
           return { message: err.message }
         })
       break
     case "get":
-      res = await axios.get(path)
+      res = await expressAxios.get(path)
         .catch(err => {
           console.error(err.message)
           return { message: err.message }
         })
       break
     case "get-file":
-      res = await axios.get(path, { responseType: 'blob' })
+      res = await expressAxios.get(path, { responseType: 'blob' })
         .catch(err => {
           console.error(err.message)
           return { message: err.message }
