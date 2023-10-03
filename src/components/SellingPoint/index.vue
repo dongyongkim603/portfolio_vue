@@ -1,7 +1,7 @@
 <template>
   <div class="selling-point">
-    <div class="column">
-      <div class="column is-one-third">
+    <div class="column" v-motion-fade-visible>
+      <div class="column is-one-third" v-motion-fade-visible>
         <h2 class="title">{{ sellingPoint.headline }}</h2>
         <img 
           v-if="sellingPoint.main_image"
@@ -10,7 +10,7 @@
           class="image"
         />
       </div>
-      <div class="column">
+      <div class="column" v-motion-fade-visible>
         <p class="subtitle">{{ sellingPoint.content }}</p>
       </div>
       <a :href="sellingPoint.button_link" class="button is-info">{{ sellingPoint.button }}</a>

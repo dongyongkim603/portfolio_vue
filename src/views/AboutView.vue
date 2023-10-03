@@ -27,7 +27,10 @@
       </div>
     </section>
     <section v-if="recentTracks" class="section">
-      <h3 class="title is-3">Top Listens</h3>
+      <div class="title-icon">
+        <h3 class="title is-3">Top Listens</h3>
+        <i class="fa-brands fa-spotify"></i>
+      </div>
       <div 
         v-if="sellingPoints"
         class="spotify-collection"
@@ -36,6 +39,7 @@
           v-for="track in recentTracks.data.recent_tracks.items"
           :key="track.id"
           class="spotify-artist"
+          v-motion-fade-visible 
         >
           <Artist v-motion-fade-visible :artist="track" />
         </div>
@@ -134,9 +138,23 @@ export default {
 }
 
 .spotify-artist {
-  background: #ffe5f0;
+  background: #e5ffe6b6;
   border-radius: 3rem;
   margin: 1rem;
-  box-shadow: 5px 5px 5px ;
+  box-shadow: 5px 5px 5px #1DB954;
+}
+
+.title-icon {
+  display: flex;
+}
+
+.fa-brands {
+  &.fa-spotify {
+    margin-bottom: 1.25rem;
+    margin-top: auto;
+    margin-left: 1rem;
+    font-size: 3rem;
+    color: #1DB954;
+  }
 }
 </style>

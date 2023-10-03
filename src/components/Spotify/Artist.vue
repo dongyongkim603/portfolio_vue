@@ -1,13 +1,13 @@
 <template>
   <div class="artist-info">
     <div class="column">
-      <div class="column is-one-third">
+      <div class="column is-one-third" v-motion-fade-visible>
         <a :href="artist.external_urls.spotify" target="_blank">
-          <section class="artist-section">
+          <section class="artist-section" v-motion-fade-visible>
             <h1 class="title is-4"><b>{{ artist.name }}</b></h1>
-            <p><b>Genres</b> {{ artist.genres.join(', ') }}</p>
+            <p class="genres"><b>Genres</b> {{ artist.genres.join(', ') }}</p>
           </section>
-          <section class="artist-section">
+          <section class="artist-section" v-motion-fade-visible>
             <img
               :src="artist.images[0].url"
               :alt="artist.name"
@@ -56,5 +56,9 @@ img {
   max-height: 100%;
   max-width: 100%;
   border-radius: 1rem;
+}
+
+.genres {
+  color: black;
 }
 </style>
