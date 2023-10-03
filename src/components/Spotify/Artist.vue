@@ -1,14 +1,16 @@
 <template>
   <div class="artist-info">
-    <h1>{{ artist.name }}</h1>
-    <p>Genres: {{ artist.genres.join(', ') }}</p>
-    <p>Popularity: {{ artist.popularity }}</p>
-    <p>Followers: {{ artist.followers.total }}</p>
-    <h2>External Links:</h2>
-    <a :href="artist.external_urls.spotify" target="_blank">Spotify Profile</a>
-    <h2>Images:</h2>
-    <div v-for="image in artist.images" :key="image.url">
-      <img :src="image.url" :alt="artist.name" :width="image.width" :height="image.height" />
+    <div class="column">
+      <div class="column is-one-third">
+        <h1><b>{{ artist.name }}</b></h1>
+        <p><b>Genres:</b> {{ artist.genres.join(', ') }}</p>
+        <p><b>Popularity:</b> {{ artist.popularity }}</p>
+        <p><b>Followers:</b> {{ artist.followers.total }}</p>
+        <a :href="artist.external_urls.spotify" target="_blank">Spotify Profile</a>
+        <div v-for="image in artist.images" :key="image.url">
+          <img :src="image.url" :alt="artist.name" :width="image.width" :height="image.height" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -22,9 +24,17 @@ export default {
 </script>
 
 <style scoped>
+.column,
 .artist-info {
-  text-align: center;
-  margin: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: auto;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
 }
 
 img {
