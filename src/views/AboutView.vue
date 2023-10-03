@@ -25,6 +25,14 @@
         </div>
       </div>
     </section>
+    <section v-if="recentTracks" class="section">
+      John's Top Listens
+      <div v-motion-fade-visible v-if="sellingPoints" class="columns">
+        <div v-for="track in recentTracks.data.recent_tracks.items" :key="track.id" >
+          <Artist :artist="track" />
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -32,21 +40,25 @@
 import { fetchSanity } from '../helpers/sanity'
 import ImageGalary from './../components/ImageGallary/index.vue'
 import Banner from './../components/Banner/index.vue'
+import Artist from './../components/Spotify/Artist.vue'
 import SellingPoint from './../components/SellingPoint/index.vue'
+import expressApi from '../helpers/expressApi'
 
 export default {
   name: 'About',
   components: {
     ImageGalary,
     Banner,
-    SellingPoint
+    SellingPoint,
+    Artist
   },
   data() {
     return {
       banner: '',
       headline: '',
       imageData: [],
-      sellingPoints: []
+      sellingPoints: [],
+      recentTracks: null
     }
   },
   async beforeCreate() {
@@ -81,7 +93,15 @@ export default {
     this.banner = pageData[0]?.banner?.asset?.url
     this.headline = pageData[0]?.headline
     this.sellingPoints = pageData[0]?.components
+    this.recentTracks = await this.getSpotifyTop()
+    console.log(this.recentTracks)
+    debugger
   },
+  methods: {
+    async getSpotifyTop() {
+      return await expressApi('post', 'recent-tracks')
+    }
+  }
 }
 </script>
 <style scoped lang="scss">

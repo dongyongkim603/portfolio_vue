@@ -59,6 +59,27 @@ export default {
     document.title = 'Log In | John'
   },
   methods: {
+    generateRandomString(length) {
+      let text = '';
+      let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+      for (let i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      }
+      return text;
+    },
+    redirectToSpotify() {
+      const state = this.generateRandomString(16);
+      const queryParams = new URLSearchParams({
+        response_type: 'code',
+        client_id: process.env.VUE_APP_SPOTIFY_CLIENT_ID,
+        redirect_uri: 'http://localhost:8080/spotify/callback',
+        state: state,
+        scope: 'user-top-read',
+      });
+      const spotifyAuthUrl = `https://accounts.spotify.com/authorize?${queryParams.toString()}`;
+      window.location.href = spotifyAuthUrl;
+    },
     async fetchUserDetails() {
       return await apiCall(
         'get',
@@ -101,9 +122,7 @@ export default {
         localStorage.setItem('profileImageUrl', userDetails.get_profile_image)
         localStorage.setItem('thumbnailUrl', userDetails.get_thumbnail)
 
-        const toPath = this.$route.query.to || '/'
-
-        this.$router.push(toPath)
+        this.redirectToSpotify();
       })
       .catch(err => {
         if(err.response) {

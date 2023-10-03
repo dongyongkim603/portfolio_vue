@@ -7,7 +7,6 @@
 import expressApi from '../../helpers/expressApi'
 
 export default {
-
   name: 'Spotify Login',
   data() {
     return {
@@ -39,6 +38,6 @@ export default {
   },
   beforeCreate() {
     document.title = 'Spotify | John'
-  }
+  },
 }
 </script>
