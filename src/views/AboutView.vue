@@ -29,7 +29,6 @@
     <section v-if="recentTracks" class="section">
       <h3 class="title is-3">Top Listens</h3>
       <div 
-        v-motion-fade-visible
         v-if="sellingPoints"
         class="spotify-collection"
       >
@@ -38,7 +37,7 @@
           :key="track.id"
           class="spotify-artist"
         >
-          <Artist :artist="track" />
+          <Artist v-motion-fade-visible :artist="track" />
         </div>
       </div>
     </section>
@@ -120,6 +119,11 @@ export default {
     background: #ffe5f0;
     margin-bottom: 0;
   }
+}
+
+.spotify-collection {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
 .selling-point {
