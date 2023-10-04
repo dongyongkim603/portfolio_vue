@@ -1,7 +1,7 @@
 <template>
   <div>
     <section v-motion-fade-visible class="section title">
-      <h1 class="title" v-if="headline">{{ headline }}</h1>
+      <h1 class="title" v-if="headline">{{headline}}</h1>
     </section>
     <Banner 
       v-motion-fade-visible
@@ -31,6 +31,19 @@
         <h3 class="title is-3">Top Listens</h3>
         <i class="fa-brands fa-spotify"></i>
       </div>
+      <div 
+        v-if="sellingPoints"
+        class="spotify-collection"
+      >
+        <div 
+          v-for="track in recentTracks.data.recent_tracks.items"
+          :key="track.id"
+          class="spotify-artist"
+          v-motion-fade-visible 
+        >
+          <Artist v-motion-fade-visible :artist="track" />
+        </div>
+      </div>
     </section>
   </div>
 </template>
@@ -56,44 +69,49 @@ export default {
       banner: '',
       headline: '',
       imageData: [],
-      sellingPoints: []
+      sellingPoints: [],
+      recentTracks: null
     }
   },
-  // async beforeCreate() {
-  //   document.title = 'John | About'
-  //   const pageData = 
-  //   await fetchSanity(`*[_type == "page" && name == "Gallery"]{
-  //       _id,
-  //       url,
-  //       name,
-  //       headline,
-  //       components[]{
-  //         button,
-  //         button_link,
-  //         headline,
-  //         content,
-  //         main_image{
-  //           asset->{
-  //             _id,
-  //             url
-  //           },
-  //           alt
-  //         }
-  //       },
-  //       banner{
-  //         asset->{
-  //           _id,
-  //           url
-  //         },
-  //         alt
-  //       }
-  //     }`)
-  //   this.banner = pageData[0]?.banner?.asset?.url
-  //   this.headline = pageData[0]?.headline
-  //   this.sellingPoints = pageData[0]?.components
-  //   this.recentTracks = await this.getSpotifyTop()
-  // },
-  methods: {}
+  async beforeCreate() {
+    document.title = 'John | About'
+    const pageData = 
+    await fetchSanity(`*[_type == "page" && name == "About"]{
+        _id,
+        url,
+        name,
+        headline,
+        components[]{
+          button,
+          button_link,
+          headline,
+          content,
+          main_image{
+            asset->{
+              _id,
+              url
+            },
+            alt
+          }
+        },
+        banner{
+          asset->{
+            _id,
+            url
+          },
+          alt
+        }
+      }`)
+    this.banner = pageData[0]?.banner?.asset?.url
+    this.headline = pageData[0]?.headline
+    this.sellingPoints = pageData[0]?.components
+    this.recentTracks = await this.getSpotifyTop()
+  },
+  methods: {
+    async getSpotifyTop() {
+      return await expressApi('post', 'recent-tracks')
+    }
+  }
 }
 </script>
 <style scoped lang="scss">
