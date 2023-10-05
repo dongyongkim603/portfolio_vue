@@ -26,7 +26,7 @@
         </div>
       </div>
     </section>
-    <section v-if="recentTracks" class="section">
+    <!-- <section v-if="recentTracks" class="section">
       <div class="title-icon">
         <h3 class="title is-3">Top Listens</h3>
         <i class="fa-brands fa-spotify"></i>
@@ -44,7 +44,7 @@
           <Artist v-motion-fade-visible :artist="track" />
         </div>
       </div>
-    </section>
+    </section> -->
   </div>
 </template>
 
@@ -57,7 +57,7 @@ import SellingPoint from './../components/SellingPoint/index.vue'
 import expressApi from '../helpers/expressApi'
 
 export default {
-  name: 'About',
+  name: 'Gallery',
   components: {
     ImageGalary,
     Banner,
@@ -74,9 +74,9 @@ export default {
     }
   },
   async beforeCreate() {
-    document.title = 'John | About'
+    document.title = 'John | Gallery'
     const pageData = 
-    await fetchSanity(`*[_type == "page" && name == "About"]{
+    await fetchSanity(`*[_type == "page" && name == "Gallery"]{
         _id,
         url,
         name,
@@ -105,7 +105,7 @@ export default {
     this.banner = pageData[0]?.banner?.asset?.url
     this.headline = pageData[0]?.headline
     this.sellingPoints = pageData[0]?.components
-    this.recentTracks = await this.getSpotifyTop()
+    // this.recentTracks = await this.getSpotifyTop()
   },
   methods: {
     async getSpotifyTop() {

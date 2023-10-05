@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import Gallery from '../views/GalleryView.vue'
 import Forum from '../views/Forum/Forum.vue'
 import SignUp from '../views/SignUp.vue'
 import Login from '../views/Login.vue'
@@ -34,7 +35,7 @@ const routes = [
   {
     path: '/spotify/callback',
     name: 'spotify-callback',
-    component: SpotifyLogin, // Replace with your component
+    component: SpotifyLogin,
     props: route => ({
       code: route.query.code,
       state: route.query.state
@@ -49,19 +50,19 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   {
-    path: '/gallary',
-    name: 'gallary',
-    component: () => import('../views/GalleryView.vue')
+    path: '/gallery',
+    name: 'gallery',
+    component: Gallery
   },
   {
     path: '/forums',
     name: 'forums',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Forum/ForumsView.vue')
+    component: () => import('../views/Forum/ForumsView.vue')
   },
   {
     path: '/create-forum',
     name: 'Create Forum',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Forum/CreateForum.vue')
+    component: () => import('../views/Forum/CreateForum.vue')
   },
   {
     path: '/:category_slug/:forum_slug/',
