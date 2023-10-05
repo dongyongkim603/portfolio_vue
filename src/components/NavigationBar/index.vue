@@ -21,7 +21,7 @@
     >
       <div class="navbar-end">
         <router-link to="/about" class="navbar-item">About</router-link>
-        <!-- <router-link to="/gallery" class="navbar-item">gallery</router-link> -->
+        <router-link to="/gallery" class="navbar-item">Gallery</router-link>
         <router-link to="/forums" class="navbar-item">Forum</router-link>
         <div class="navbar-item">
           <div v-if="!$store.state.token" class="buttons">
@@ -46,14 +46,8 @@ export default {
   data() {
     return {
       showMobileMenu: false,
-      hasUserImage: false, // Set this to true if user image is present
+      hasUserImage: false,
       showDropdown: false
-    }
-  },
-  computed: {
-    userImageUrl() {
-      // Return the user image URL here if available
-      return '/path/to/user/image.jpg';
     }
   },
   methods: {
